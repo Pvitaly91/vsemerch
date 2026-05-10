@@ -38,3 +38,14 @@
 /frontend/web/upload/*
 /frontend/web/files/*
 /frontend/web/catalogpdf/*
+
+/backend/runtime/
+/console/runtime/
+/console/runtime*
+/frontend/runtime/
+/backend/web/assets/
+/frontend/web/assets/
+/frontend/web/upload/
+/frontend/web/files/
+/frontend/web/catalogpdf/
+/vendor/yiisoft/yii2/console/runtime/
