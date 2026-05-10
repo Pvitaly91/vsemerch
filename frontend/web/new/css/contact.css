@@ -1,0 +1,38 @@
+ 
+/* contact */
+   .content, .container_order-pages{
+        width: 48%;
+        font-weight: 600;
+    }
+    .main-block{
+        display: flex;
+        margin-top: 35px;
+    }
+    h1{
+        font-weight: 600;
+        font-size: 24px;
+        line-height: 28px;
+        color: #DB4444;
+          margin: 0px 0px 30px;
+
+       
+    }
+    .content{
+        line-height: 25px;
+        padding: 30px 45px;
+        margin-right: 4%;
+    }
+    @media (max-width: 700px) {
+        .content, .container_order-pages{
+            width: 100%;
+        
+        }
+        .main-block{
+            display: block;
+        }
+        .contact-infotmation_input{
+            margin: auto;
+            margin-top: 30px;
+               max-width: 97%;
+        }
+    

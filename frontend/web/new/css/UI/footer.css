@@ -1,0 +1,109 @@
+/* Footer */
+.footer {
+	margin-top: 125px;
+	width: 100%;
+	background-color: #383838;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-bottom: 53px;
+}
+.footer__wrapper {
+	display: flex;
+	column-gap: 190px;
+	align-items: center;
+}
+.footer__wrapper-paragraph {
+	font-style: normal;
+	font-weight: 400;
+	font-size: 17px;
+	line-height: 115.5%;
+	text-align: center;
+	color: #ffffff;
+}
+.footer__wrapper-paragpraph-bold {
+	font-weight: 800;
+}
+.footer-title-bold {
+	font-weight: 800 !important;
+}
+.footer__wrapper-mail {
+	font-weight: 800 !important;
+	font-size: 17px;
+	line-height: 115.5%;
+	text-align: center;
+	text-decoration-line: underline;
+	color: #ffffff;
+}
+.footer__wrapper-titles {
+	display: flex;
+	flex-direction: column;
+	margin-top: 40px;
+	row-gap: 15px;
+	align-items: flex-start;
+}
+.footer__wrapper-titles p {
+	font-style: normal;
+	font-weight: 500;
+	font-size: 17px;
+	line-height: 115.5%;
+	text-align: center;
+	color: #ffffff;
+}
+
+.footer__wrapper-copyright {
+	mix-blend-mode: difference;
+	margin-top: 24px;
+	display: flex;
+	flex-direction: column;
+	row-gap: 18px;
+	align-items: center;
+}
+.footer-mobile {
+	display: none;
+}
+@media (max-width: 1040px) {
+	.footer__wrapper {
+		flex-direction: column;
+	}
+	.footer__wrapper-copyright {
+		order: 1;
+	}
+	.footer__wrapper-titles-mobile {
+		margin-top: 40px;
+		max-width: 222px;
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+		column-gap: 54px;
+		row-gap: 20px;
+	}
+	.footer__wrapper-titles {
+		margin-top: 20px;
+		align-items: center;
+		justify-content: center;
+		row-gap: 20px;
+	}
+	.footer__wrapper-copyright {
+		margin-top: 25px;
+		row-gap: 10px;
+	}
+	.footer {
+		margin-top: 138px;
+		padding-bottom: 40px;
+	}
+	.footer__wrapper-titles-mobile p {
+		font-style: normal;
+		font-weight: 500;
+		font-size: 17px;
+		line-height: 115.5%;
+		text-align: center;
+		color: #ffffff;
+	}
+	.footer-pc {
+		display: none;
+	}
+	.footer-mobile {
+		display: block;
+	}
+}

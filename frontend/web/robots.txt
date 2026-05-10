@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /*.php
+Disallow: /call
+Disallow: /mail
+Disallow: /disease
+Disallow: /admin
+
+Host: https://agcity.com.ua
+Sitemap: https://agcity.com.ua/sitemap.xml

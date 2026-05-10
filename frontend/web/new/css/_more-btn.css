@@ -1,0 +1,35 @@
+.more-btn {
+	margin-top: 40px;
+	margin-left: 270px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.more-btn button {
+	background: #ffffff;
+	box-shadow: 3px 3px 25px rgba(65, 55, 55, 0.17);
+	backdrop-filter: blur(6px);
+	border-radius: 10px;
+	border: none;
+	width: 216px;
+	height: 50px;
+	font-weight: 700;
+	font-size: 20px;
+	line-height: 23px;
+	text-align: center;
+	color: #db4444;
+}
+@media (max-width: 1040px) {
+	.more-btn {
+		margin-top: 10px;
+		margin-left: unset;
+	}
+	.more-btn button {
+		width: 600px;
+	}
+}
+@media (max-width: 599px) {
+	.more-btn button {
+		width: 350px;
+	}
+}

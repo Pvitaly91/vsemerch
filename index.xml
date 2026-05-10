@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE yml2_catalog SYSTEM "shops.dtd">
+<yml_catalog date="2022-11-19 14:33">
+<shop>
+<name>Тотобі</name>
+<company>Тотобі</company>
+<url>http://totobi.com.ua</url>
+<platform>CS-Cart</platform>
+<version>4.4.2</version>
+<agency>Agency</agency>
+<email>info@totobi.com.ua</email>
+<currencies>
+    <currency id="UAH" rate="1.00000"/>
+    <currency id="USD" rate="0.00001"/>
+    <currency id="EUR" rate="0.00001"/>
+</currencies>
+<categories>
+    <category id="179">Інструменти</category>
+    <category id="286" parentId="179">Викрутки</category>
+    <category id="250" parentId="179">Мультитули</category>
+    <category id="267" parentId="179">Ножі</category>
+    <category id="180" parentId="179">Рулетки</category>
+    <category id="206">Годинники</category>
+    <category id="241">Головні убори</category>
+    <category id="263" parentId="241">Дитяча кепка</category>
+    <category id="226" parentId="241">Кепки </category>
+    <category id="194">Дім</category>
+    <category id="257" parentId="194">Рушники</category>
+    <category id="253" parentId="194">Мед подарунковий</category>
+    <category id="237" parentId="194">Годівнички</category>
+    <category id="234">Для професіоналів</category>
+    <category id="235" parentId="234">Опадоміри</category>
+    <category id="224">Електроніка</category>
+    <category id="281" parentId="224">Аксесуари</category>
+    <category id="251" parentId="224">Зарядні пристрої</category>
+    <category id="279" parentId="224">Зволожувачі повітря</category>
+    <category id="258" parentId="224">Портативна акустика</category>
+    <category id="181">Одяг</category>
+    <category id="255" parentId="181">Спортивний одяг</category>
+    <category id="182" parentId="181">Футболки</category>
+    <category id="238" parentId="181">Поло</category>
+    <category id="239" parentId="181">Дитячий одяг</category>
+    <category id="246" parentId="181">Реглани, фліси</category>
+    <category id="215" parentId="181">Жилети</category>
+    <category id="243" parentId="181">Куртки та софтшели</category>
+    <category id="204">Офіс</category>
+    <category id="205" parentId="204">Записні книжки</category>
+    <category id="227">Парасолі</category>
+    <category id="249" parentId="227">Парасолі складні</category>
+    <category id="236" parentId="227">Парасолі-тростини</category>
+    <category id="201">Персональні аксессуари</category>
+    <category id="203" parentId="201">Брелки</category>
+    <category id="202" parentId="201">Візитниці</category>
+    <category id="183">Подорож та відпочинок</category>
+    <category id="259" parentId="183">Все для пікніка</category>
+    <category id="273" parentId="183">Ланч бокси</category>
+    <category id="195" parentId="183">Пледи</category>
+    <category id="184" parentId="183">Пляшки для пиття</category>
+    <category id="185" parentId="183">Термоси та термокружки</category>
+    <category id="216" parentId="183">Фляги</category>
+    <category id="276" parentId="183">Штопори</category>
+    <category id="230">Посуд</category>
+    <category id="256" parentId="230">Горнятка</category>
+    <category id="186">Ручки</category>
+    <category id="269" parentId="186">Еко ручки</category>
+    <category id="187" parentId="186">Металеві ручки</category>
+    <category id="188" parentId="186">Пластикові ручки</category>
+    <category id="189">Сумки</category>
+    <category id="196" parentId="189">Валізи</category>
+    <category id="284" parentId="189">Косметички</category>
+    <category id="217" parentId="189">Мішок спортивний</category>
+    <category id="190" parentId="189">Рюкзаки для ноутбуків</category>
+    <category id="191" parentId="189">Рюкзаки для подорожі</category>
+    <category id="192" parentId="189">Сумки для ноутбуків</category>
+    <category id="264" parentId="189">Сумки для покупок</category>
+    <category id="193" parentId="189">Сумки дорожні та спортивні</category>
+    <category id="271" parentId="189">Сумки на пояс</category>
+    <category id="280" parentId="189">Термосумки</category>
+    <category id="272">Упаковка</category>
+    <category id="282" parentId="272">Подарункова коробка</category>
+    <category id="285">Уцінка</category>
+    <category id="213">Акційна пропозиція</category>
+    <category id="270">Новинки</category>
+</categories>
+<offers>
+    <offer id="1594" available="true">
+        <url>http://totobi.com.ua/nstrumenti-ta-lhtar/ruletki/ruletka-galaxy-tm-totob-art-9001-09/</url>
+        <amount>0</amount>
+        <in_stock>0</in_stock>
+        <is_new>N</is_new>
+        <textile>N</textile>
+        <price_type>Базова ціна</price_type>
+        <reserve>0</reserve>
+        <wait>0</wait>
+        <date_delivery>0</date_delivery>
+        <price>277.98</price>
+        <currencyId>UAH</currencyId>
+        <categoryId>180</categoryId>
+        <picture>http://totobi.com.ua/images/detailed/3/53888efd-c837-11e6-80c2-000c295c9c78_84437d8a-6083-11e7-80c9-000c295c9c78..jpg</picture>
+        <picture>http://totobi.com.ua/images/detailed/3/53888efd-c837-11e6-80c2-000c295c9c78_82775b39-476b-11e7-80c8-000c295c9c78..jpg</picture>
+        <picture>http://totobi.com.ua/images/detailed/3/53888efd-c837-11e6-80c2-000c295c9c78_84437d8b-6083-11e7-80c9-000c295c9c78..jpg</picture>
+        <picture>http://totobi.com.ua/images/detailed/3/53888efd-c837-11e6-80c2-000c295c9c78_84437d8c-6083-11e7-80c9-000c295c9c78..jpg</picture>
+        <store>false</store>
+        <pickup>false</pickup>
+        <delivery>true</delivery>
+        <name>Рулетка Galaxy, 5 м., ТМ Totobi</name>
+        <vendorCode>9001-09</vendorCode>
+        <description>Рулетка будівельна, 5 метрів. Стійкий, прорезинений корпус, магнітний наконечник, стальна стрічка. Модель з двома фіксаторами. </description>
+        <param name="Індивідуальна упаковка">Індивідуальна картонна коробка</param>
+        <param name="Вага ящика">18 кг</param>
+        <param name="Група нанесення">Тамподрук, УФ друк, смоляна наліпка</param>
+        <param name="Кількість в упаковці">1 шт</param>
+        <param name="Кількість у ящику">72 шт</param>
+        <param name="Колір">срібний</param>
+        <param name="Матеріал">Пластик</param>
+        <param name="Метраж">5 м</param>
+        <param name="Підрозділ у каталозі">Рулетки</param>
+        <param name="Розділ у каталозі">Інструменти</param>
+        <param name="Розмір">7.9 х 7.2 х 4.3 см</param>
+        <param name="Стать">унісекс</param>
+        <param name="ТМ">Totobi</param>
+    </offer>
+
+    <offer id="1606" available="false">
+        <url>http://totobi.com.ua/podorozh-ta-vdpochinok/termosi-ta-termokruzhki/termochashka-magnum-tmdiscover-art-2500-08/</url>
+        <amount>615</amount>
+        <in_stock>617</in_stock>
+        <is_new>N</is_new>
+        <textile>N</textile>
+        <price_type>Базова ціна</price_type>
+        <reserve>2</reserve>
+        <wait>0</wait>
+        <date_delivery>0</date_delivery>
+        <price>568.26</price>
+        <currencyId>UAH</currencyId>
+        <categoryId>185</categoryId>
+        <picture>http://totobi.com.ua/images/detailed/3/a4b2ada0-c848-11e6-80c2-000c295c9c78_84437d80-6083-11e7-80c9-000c295c9c78..jpg</picture>
+        <picture>http://totobi.com.ua/images/detailed/3/a4b2ada0-c848-11e6-80c2-000c295c9c78_84437d81-6083-11e7-80c9-000c295c9c78..jpg</picture>
+        <store>false</store>
+        <pickup>false</pickup>
+        <delivery>true</delivery>
+        <name>Термокружка Magnum, ТМ Discover</name>
+        <vendorCode>2500-08</vendorCode>
+        <description>Термокружка 480 мл. з нержавіючої сталі. Вкрита перламутровою емаллю, кришка непроливайка. Кришку можна мити в посудомийній машині. Корпус мити тільки вручну щоб не пошкодити кольорове покриття</description>
+        <param name="Індивідуальна упаковка">Індивідуальна картонна коробка</param>
+        <param name="Вага ящика">8.8 кг</param>
+        <param name="Висота">22,2 см</param>
+        <param name="Група Кольорів">Чорний</param>
+        <param name="Група нанесення">Гравіювання</param>
+        <param name="Діаметр">7,2 см</param>
+        <param name="Кількість в упаковці">1 шт</param>
+        <param name="Кількість у ящику">24 шт</param>
+        <param name="Колір">чорний</param>
+        <param name="Матеріал">Нержавіюча сталь</param>
+        <param name="Об&#039;єм">480 мл</param>
+        <param name="Підрозділ у каталозі">Термоси та термокружки</param>
+        <param name="Розділ у каталозі">Подорож та відпочинок</param>
+        <param name="Розмір">Висота 22,3 см, діаметр 7 см</param>
+        <param name="Розмір ящика">53 х 36 х 25 см</param>
+        <param name="Стать">унісекс</param>
+        <param name="ТМ">Discover</param>
+    </offer>
+
+    <offer id="1610" available="false">
+        <url>http://totobi.com.ua/podorozh-ta-vdpochinok/termosi-ta-termokruzhki/termochashka-donald-tmdiscover-art-2503-07/</url>
+        <amount>0</amount>
+        <in_stock>0</in_stock>
+        <is_new>N</is_new>
+        <textile>N</textile>
+        <price_type>Базова ціна</price_type>
+        <reserve>0</reserve>
+        <wait>0</wait>
+        <date_delivery>0</date_delivery>
+        <price>585.48</price>
+        <currencyId>UAH</currencyId>
+        <categoryId>185</categoryId>
+        <picture>http://totobi.com.ua/images/detailed/3/a4b2adb8-c848-11e6-80c2-000c295c9c78_5b89c8b4-4798-11e7-80c8-000c295c9c78..jpg</picture>
+        <picture>http://totobi.com.ua/images/detailed/3/a4b2adb8-c848-11e6-80c2-000c295c9c78_5b89c8b6-4798-11e7-80c8-000c295c9c78..jpg</picture>
+        <picture>http://totobi.com.ua/images/detailed/3/a4b2adb8-c848-11e6-80c2-000c295c9c78_5b89c8b5-4798-11e7-80c8-000c295c9c78..jpg</picture>
+        <picture>http://totobi.com.ua/images/detailed/3/a4b2adb8-c848-11e6-80c2-000c295c9c78_aa2adad1-9147-11e7-80c9-000c295c9c78..jpg</picture>
+        <store>false</store>
+        <pickup>false</pickup>
+        <delivery>true</delivery>
+        <name>Термокружка Donald, ТМ Discover</name>
+        <vendorCode>2503-07</vendorCode>
+        <description>Термокружка 600 мл з нержавіючої сталі вкрита перламутровою емаллю, кришка непроливайка. Кришку можна мити в посудомийній машині. Корпус мити тільки вручну щоб не пошкодити кольорове покриття</description>
+        <param name="Індивідуальна упаковка">Індивідуальна картонна коробка</param>
+        <param name="Вага ящика">9.5 кг</param>
+        <param name="Висота">24 см</param>
+        <param name="Група нанесення">Гравіювання</param>
+        <param name="Діаметр">8,2 см</param>
+        <param name="Кількість в упаковці">1 шт</param>
+        <param name="Кількість у ящику">24 шт</param>
+        <param name="Колір">коричневий</param>
+        <param name="Матеріал">Нержавіюча сталь</param>
+        <param name="Об&#039;єм">600 мл</param>
+        <param name="Підрозділ у каталозі">Термоси та термокружки</param>
+        <param name="Розділ у каталозі">Подорож та відпочинок</param>
+        <param name="Розмір">Висота 22.5 см, діаметр 8.5 см, дно 7 см</param>
+        <param name="Стать">унісекс</param>
+        <param name="ТМ">Discover</param>
+    </offer>
+
+    <offer id="1611" available="true">
+        <url>http://totobi.com.ua/podorozh-ta-vdpochinok/termosi-ta-termokruzhki/termochashka-hulk-tmdiscover-art-2504-10/</url>
+        <amount>191</amount>
+        <in_stock>214</in_stock>
+        <is_new>N</is_new>
+        <textile>N</textile>
+        <price_type>Базова ціна</price_type>
+        <reserve>23</reserve>
+        <wait>0</wait>
+        <date_delivery>0</date_delivery>
+        <price>530.13</price>
+        <currencyId>UAH</currencyId>
+        <categoryId>185</categoryId>
+        <picture>http://totobi.com.ua/images/detailed/3/a4b2adc1-c848-11e6-80c2-000c295c9c78_5b89c8b9-4798-11e7-80c8-000c295c9c78..jpg</picture>
+        <picture>http://totobi.com.ua/images/detailed/3/a4b2adc1-c848-11e6-80c2-000c295c9c78_5b89c8b8-4798-11e7-80c8-000c295c9c78..jpg</picture>
+        <picture>http://totobi.com.ua/images/detailed/3/a4b2adc1-c848-11e6-80c2-000c295c9c78_aa2adad0-9147-11e7-80c9-000c295c9c78..jpg</picture>
+        <store>false</store>
+        <pickup>false</pickup>
+        <delivery>true</delivery>
+        <name>Термокружка Hulk, ТМ Discover</name>
+        <vendorCode>2504-10</vendorCode>
+        <description>Термокружка 600 мл з нержавіючої сталі вкрита перламутровою емаллю з прозорою пластиковою кришкою. Кришку можна мити в посудомийній машині. Корпус мити тільки вручну щоб не пошкодити кольорове покриття. Кружка має двошарову вакуумну констррукцію з нержавіючої сталі всередині та зовні. Тримає напій гарячим до 5 годин. холодним до 10 годин. Висота 18 см, діаметр: верх - 9,3 см, дно - 7,2 см.</description>
+        <param name="Індивідуальна упаковка">Індивідуальна картонна коробка</param>
+        <param name="Вага ящика">8,2 кг</param>
+        <param name="Висота">18 см</param>
+        <param name="Група нанесення">Гравіювання</param>
+        <param name="Діаметр">9,4 см</param>
+        <param name="Кількість в упаковці">1 шт</param>
+        <param name="Кількість у ящику">24 шт</param>
+        <param name="Колір">сірий</param>
+        <param name="Матеріал">Нержавіюча сталь</param>
+        <param name="Об&#039;єм">600 мл</param>
+        <param name="Підрозділ у каталозі">Термоси та термокружки</param>
+        <param name="Розділ у каталозі">Подорож та відпочинок</param>
+        <param name="Розмір">Висота 18 см, діаметр: верх - 9,3 см, дно - 7,2 см</param>
+        <param name="Розмір ящика">61,5 х 41,5 х 21 см</param>
+        <param name="Стать">унісекс</param>
+        <param name="ТМ">Discover</param>
+    </offer>
+
+    <offer id="1614" available="true">
+        <url>http://totobi.com.ua/sumki/ryukzaki-dlya-noutbukv/ryukzak-dlya-noutbuka-modul-tm-totobi-art-3014-10/</url>
+        <amount>137</amount>
+        <in_stock>367</in_stock>
+        <is_new>N</is_new>
+        <textile>N</textile>
+        <price_type>Базова ціна</price_type>
+        <reserve>230</reserve>
+        <wait>1920</wait>
+        <date_delivery>1643320800</date_delivery>
+        <price>945.87</price>
+        <currencyId>UAH</currencyId>
+        <categoryId>190</categoryId>
+        <picture>http://totobi.com.ua/images/detailed/3/a9dfcd2b-c857-11e6-80c2-000c295c9c78_5b89c886-4798-11e7-80c8-000c295c9c78..jpg</picture>
+        <picture>http://totobi.com.ua/images/detailed/3/a9dfcd2b-c857-11e6-80c2-000c295c9c78_5b89c887-4798-11e7-80c8-000c295c9c78..jpg</picture>
+        <picture>http://totobi.com.ua/images/detailed/3/a9dfcd2b-c857-11e6-80c2-000c295c9c78_5b89c888-4798-11e7-80c8-000c295c9c78..jpg</picture>
+        <picture>http://totobi.com.ua/images/detailed/3/a9dfcd2b-c857-11e6-80c2-000c295c9c78_044958cc-c527-11e7-80ca-000c295c9c78..jpg</picture>
+        <picture>http://totobi.com.ua/images/detailed/3/a9dfcd2b-c857-11e6-80c2-000c295c9c78_044958cd-c527-11e7-80ca-000c295c9c78..jpg</picture>
+        <store>false</store>
+        <pickup>false</pickup>
+        <delivery>true</delivery>
+        <name>Рюкзак для ноутбука Modul, ТМ Totobi</name>
+        <vendorCode>3014-10</vendorCode>
+        <description>Рюкзак для ноутбука. Два великих відділення, відділення для ноутбука, чотири кишені для дрібних речей, дві петельки для ручок, одна кишеня попереду. М&#039;яка спинка та лямки з пасивною системою вентиляції. Ущільнена м&#039;яка підкладка. Матеріал : поліестер під імітацію джута.</description>
+        <param name="Індивідуальна упаковка">п\п пакет</param>
+        <param name="Вага ящика">8 кг</param>
+        <param name="Група Кольорів">Сірий</param>
+        <param name="Група нанесення">Термодрук, шовкодрук</param>
+        <param name="Для ноутбука з діагоналлю">15&quot;</param>
+        <param name="Кількість в упаковці">1 шт</param>
+        <param name="Кількість у ящику">12 шт</param>
+        <param name="Колір">сірий</param>
+        <param name="Матеріал">поліестер </param>
+        <param name="Об&#039;єм">19 л</param>
+        <param name="Підрозділ у каталозі">Рюкзаки для ноутбуків</param>
+        <param name="Розділ у каталозі">Сумки</param>
+        <param name="Розмір">47 х 13 х 31 см</param>
+        <param name="Розмір ящика">49 х 35 х 50 см</param>
+        <param name="Стать">унісекс</param>
+        <param name="ТМ">Totobi</param>
+    </offer>
+
+    <offer id="1615" available="false">
+        <url>http://totobi.com.ua/sumki/ryukzaki-dlya-podorozh/ryukzak-dlya-podorozhey-tour-tm-totobi-art-3000-10/</url>
+        <amount>0</amount>
+        <in_stock>0</in_stock>
+        <is_new>N</is_new>
+        <textile>N</textile>
+        <price_type>Базова ціна</price_type>
+        <reserve>0</reserve>
+        <wait>0</wait>
+        <date_delivery>0</date_delivery>
+        <price>1001.63</price>
+        <currencyId>UAH</currencyId>
+        <categoryId>191</categoryId>
+        <picture>http://totobi.com.ua/images/detailed/3/a9dfcd33-c857-11e6-80c2-000c295c9c78_5b89c899-4798-11e7-80c8-000c295c9c78..jpg</picture>
+        <picture>http://totobi.com.ua/images/detailed/3/a9dfcd33-c857-11e6-80c2-000c295c9c78_5b89c89a-4798-11e7-80c8-000c295c9c78..jpg</picture>
+        <store>false</store>
+        <pickup>false</pickup>
+        <delivery>true</delivery>
+        <name>Рюкзак для подорожей Tour, ТМ Totobi</name>
+        <vendorCode>3000-10</vendorCode>
+        <description>Рюкзак для подорожей, спорту та відпочинку. Велике основне відділення, відділення для дрібниць на блискавці, дві кишені попереду на блискавці, дві бокові кишені для пляшок або дрібниць.  М&#039;яка спинка та лямки з пасивною системою вентиляції. Ущільнена м&#039;яка підкладка. Матеріал: поліестер під імітацію джута.</description>
+        <param name="Індивідуальна упаковка">п\п пакет</param>
+        <param name="Вага ящика">15,2 кг</param>
+        <param name="Група нанесення">Термодрук, шовкодрук</param>
+        <param name="Кількість в упаковці">1 шт</param>
+        <param name="Кількість у ящику">24 шт</param>
+        <param name="Колір">сірий</param>
+        <param name="Матеріал">поліестер </param>
+        <param name="Підрозділ у каталозі">Рюкзаки для подорожі</param>
+        <param name="Розділ у каталозі">Сумки</param>
+        <param name="Розмір">46 х 19 х 32 см</param>
+        <param name="Розмір ящика">76 х 46 х 36 см</param>
+        <param name="Стать">унісекс</param>
+        <param name="ТМ">Totobi</param>
+    </offer>
+
+    <offer id="1616" available="true">
+        <url>http://totobi.com.ua/sumki/ryukzaki-dlya-noutbukv/ryukzak-dlya-noutbuka-neo-tm-totobi-art-4003-05/</url>
+        <amount>607</amount>
+        <in_stock>609</in_stock>
+        <is_new>N</is_new>
+        <textile>N</textile>
+        <price_type>Базова ціна</price_type>
+        <reserve>2</reserve>
+        <wait>0</wait>
+        <date_delivery>0</date_delivery>
+        <price>1477.64</price>
+        <currencyId>UAH</currencyId>
+        <categoryId>190</categoryId>
+        <picture>http://totobi.com.ua/images/detailed/3/a9dfcd3a-c857-11e6-80c2-000c295c9c78_411f8947-477d-11e7-80c8-000c295c9c78..jpg</picture>
+        <picture>http://totobi.com.ua/images/detailed/3/a9dfcd3a-c857-11e6-80c2-000c295c9c78_411f8948-477d-11e7-80c8-000c295c9c78..jpg</picture>
+        <store>false</store>
+        <pickup>false</pickup>
+        <delivery>true</delivery>
+        <name>Рюкзак для ноутбука  Neo, ТМ Totobi</name>
+        <vendorCode>4003-05</vendorCode>
+        <description>Рюкзак для ноутбука 15&#039;&#039;. Одне велике відділення, з фіксатором для ноутбука, 2 фронтальні кишені та 2 бокові. М&#039;яка спинка та лямки з пасивною системою вентиляції. Ущільнена м&#039;яка підкладка. Матеріал: Нейлон\шкірзамінник.</description>
+        <param name="Індивідуальна упаковка">п\п пакет</param>
+        <param name="Вага ящика">13.7 кг</param>
+        <param name="Група нанесення">Шовкодрук, гравіювання</param>
+        <param name="Для ноутбука з діагоналлю">15&quot;</param>
+        <param name="Кількість в упаковці">1 шт</param>
+        <param name="Кількість у ящику">15 шт</param>
+        <param name="Колір">синій</param>
+        <param name="Матеріал">Нейлон</param>
+        <param name="Об&#039;єм">22 л</param>
+        <param name="Підрозділ у каталозі">Рюкзаки для ноутбуків</param>
+        <param name="Розділ у каталозі">Сумки</param>
+        <param name="Розмір">47 х 14.5 х 32 см</param>
+        <param name="Розмір ящика">73 х 49 х 34 см</param>
+        <param name="Стать">унісекс</param>
+        <param name="ТМ">Totobi</param>
+    </offer>
+
+    <offer id="1617" available="true">
+        <url>http://totobi.com.ua/sumki/ryukzaki-dlya-podorozh/ryukzak-dlya-podorozhey-easy-tm-totobi-art-3003-04/</url>
+        <amount>526</amount>
+        <in_stock>1527</in_stock>
+        <is_new>N</is_new>
+        <textile>N</textile>
+        <price_type>Базова ціна</price_type>
+        <reserve>1001</reserve>
+        <wait>0</wait>
+        <date_delivery>0</date_delivery>
+        <price>367.36</price>
+        <currencyId>UAH</currencyId>
+        <categoryId>191</categoryId>
+        <picture>http://totobi.com.ua/images/detailed/3/a9dfcd41-c857-11e6-80c2-000c295c9c78_5b89c894-4798-11e7-80c8-000c295c9c78..jpg</picture>
+        <picture>http://totobi.com.ua/images/detailed/3/a9dfcd41-c857-11e6-80c2-000c295c9c78_5b89c893-4798-11e7-80c8-000c295c9c78..jpg</picture>
+        <picture>http://totobi.com.ua/images/detailed/3/a9dfcd41-c857-11e6-80c2-000c295c9c78_5b89c895-4798-11e7-80c8-000c295c9c78..jpg</picture>
+        <store>false</store>
+        <pickup>false</pickup>
+        <delivery>true</delivery>
+        <name>Рюкзак для подорожей Easy, ТМ Discover</name>
+        <vendorCode>3003-04</vendorCode>
+        <description>Рюкзак для подорожей, спорту та відпочинку. Має одне основне велике відділення, одну кишеню попереду, а також бокову кишеню-тримач для пляшки. Матеріал: поліестер, імітація джуту.</description>
+        <param name="Індивідуальна упаковка">п\п пакет</param>
+        <param name="Вага ящика">15 кг</param>
+        <param name="Група нанесення">Термодрук, шовкодрук</param>
+        <param name="Кількість в упаковці">1 шт</param>
+        <param name="Кількість у ящику">30 шт</param>
+        <param name="Колір">червоний</param>
+        <param name="Матеріал">поліестер </param>
+        <param name="Підрозділ у каталозі">Рюкзаки для подорожі</param>
+        <param name="Розділ у каталозі">Сумки</param>
+        <param name="Розмір">41 х 14 х 30 см</param>
+        <param name="Розмір ящика">45 х 37 х 40 см</param>
+        <param name="Стать">унісекс</param>
+        <param name="ТМ">Discover</param>
+    </offer>
+
+    <offer id="1618" available="false">
+        <url>http://totobi.com.ua/sumki/ryukzaki-dlya-podorozh/ryukzak-dlya-podorozhey-easy-tm-totobi-art-3003-05/</url>
+        <amount>0</amount>
+        <in_stock>0</in_stock>
+        <is_new>N</is_new>
+        <textile>N</textile>
+        <price_type>Базова ціна</price_type>
+        <reserve>0</reserve>
+        <wait>0</wait>
+        <date_delivery>0</date_delivery>
+        <price>367.36</price>
+        <currencyId>UAH</currencyId>
+        <categoryId>191</categoryId>
+        <picture>http://totobi.com.ua/images/detailed/9/a9dfcd41-c857-11e6-80c2-000c295c9c78_a1cf2bcc-96e8-11e8-80cf-000c295c9c78..jpg</picture>
+        <picture>http://totobi.com.ua/images/detailed/5/a9dfcd41-c857-11e6-80c2-000c295c9c78_a1cf2bd7-96e8-11e8-80cf-000c295c9c78..jpg</picture>
+        <store>false</store>
+        <pickup>false</pickup>
+        <delivery>true</delivery>
+        <name>Рюкзак для подорожей Easy, ТМ Discover</name>
+        <vendorCode>3003-05</vendorCode>
+        <description>Рюкзак для подорожей, спорту та відпочинку. Має одне основне велике відділення, одну кишеню попереду, а також бокову кишеню-тримач для пляшки. Матеріал: поліестер, імітація джуту.</description>
+        <param name="Індивідуальна упаковка">п\п пакет</param>
+        <param name="Вага ящика">15 кг</param>
+        <param name="Група нанесення">Термодрук, шовкодрук</param>
+        <param name="Кількість в упаковці">1 шт</param>
+        <param name="Кількість у ящику">30 шт</param>
+        <param name="Колір">синій</param>
+        <param name="Матеріал">поліестер </param>
+        <param name="Підрозділ у каталозі">Рюкзаки для подорожі</param>
+        <param name="Розділ у каталозі">Сумки</param>
+        <param name="Розмір">41 х 14 х 30 см</param>
+        <param name="Розмір ящика">45 х 37 х 40 см</param>
+        <param name="Стать">унісекс</param>
+        <param name="ТМ">Discover</param>
+    </offer>
+
+    <offer id="1619" available="true">
+        <url>http://totobi.com.ua/sumki/ryukzaki-dlya-podorozh/ryukzak-dlya-podorozhey-easy-tm-totobi-art-3003-10/</url>
+        <amount>597</amount>
+        <in_stock>697</in_stock>
+        <is_new>N</is_new>
+        <textile>N</textile>
+        <price_type>Базова ціна</price_type>
+        <reserve>100</reserve>
+        <wait>0</wait>
+        <date_delivery>0</date_delivery>
+        <price>367.36</price>
+        <currencyId>UAH</currencyId>
+        <categoryId>191</categoryId>
+        <picture>http://totobi.com.ua/images/detailed/3/a9dfcd41-c857-11e6-80c2-000c295c9c78_5b89c897-4798-11e7-80c8-000c295c9c78..jpg</picture>
+        <store>false</store>
+        <pickup>false</pickup>
+        <delivery>true</delivery>
+        <name>Рюкзак для подорожей Easy, ТМ Discover</name>
+        <vendorCode>3003-10</vendorCode>
+        <description>Рюкзак для подорожей, спорту та відпочинку. Має одне основне велике відділення, одну кишеню попереду, а також бокову кишеню-тримач для пляшки. Матеріал: поліестер, імітація джуту.</description>
+        <param name="Індивідуальна упаковка">п\п пакет</param>
+        <param name="Вага ящика">15 кг</param>
+        <param name="Група нанесення">Термодрук, шовкодрук</param>
+        <param name="Кількість в упаковці">1 шт</param>
+        <param name="Кількість у ящику">30 шт</param>
+        <param name="Колір">сірий</param>
+        <param name="Матеріал">поліестер </param>
+        <param name="Підрозділ у каталозі">Рюкзаки для подорожі</param>
+        <param name="Розділ у каталозі">Сумки</param>
+        <param name="Розмір">41 х 14 х 30 см</param>
+        <param name="Розмір ящика">45 х 37 х 40 см</param>
+        <param name="Стать">унісекс</param>
+        <param name="ТМ">Discover</param>
+    </offer>
+   
+
+</offers>
+</shop>
+</yml_catalog>
