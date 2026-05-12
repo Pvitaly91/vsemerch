@@ -16,6 +16,31 @@ Documentation is at [docs/guide/README.md](docs/guide/README.md).
 [![Total Downloads](https://poser.pugx.org/yiisoft/yii2-app-advanced/downloads.png)](https://packagist.org/packages/yiisoft/yii2-app-advanced)
 [![Build Status](https://travis-ci.org/yiisoft/yii2-app-advanced.svg?branch=master)](https://travis-ci.org/yiisoft/yii2-app-advanced)
 
+OPTIMIZE SHOP IMAGES
+--------------------
+
+The `optimize-shop-images` console command compresses large imported product
+images in `frontend/web/upload/shop` without changing file names, extensions, or
+database records.
+
+Test dry-run:
+
+```
+php yii optimize-shop-images --dryRun=1 --verbose=1
+```
+
+Real run:
+
+```
+php yii optimize-shop-images
+```
+
+Cron after import:
+
+```
+php /path/to/project/yii optimize-shop-images --path=@frontend/web/upload/shop --minSizeKb=500 --maxWidth=1600 --maxHeight=1600 --quality=82 --pngCompression=8
+```
+
 DIRECTORY STRUCTURE
 -------------------
 

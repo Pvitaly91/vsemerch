@@ -20,6 +20,7 @@ return [
                 ],
             ],
         ],    
+        'session' => new \yii\helpers\UnsetArrayValue(),
         'PartnersUtils' => [
             'class' => '\common\components\PartnersUtils',
         ]
