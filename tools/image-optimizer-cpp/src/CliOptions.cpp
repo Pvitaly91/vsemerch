@@ -225,6 +225,11 @@ bool parseCliOptions(int argc, char** argv, CliOptions& options, std::string& er
                 return false;
             }
             options.forceLock = boolValue;
+        } else if (key == "allow-small-dimensions") {
+            if (!setWithError(key, value, [&] { return parseBool(value, boolValue); }, error)) {
+                return false;
+            }
+            options.allowSmallDimensions = boolValue;
         } else {
             error = "Unknown option: --" + key;
             return false;
@@ -233,6 +238,11 @@ bool parseCliOptions(int argc, char** argv, CliOptions& options, std::string& er
 
     if (options.path.empty()) {
         error = "--path is required";
+        return false;
+    }
+
+    if (!options.allowSmallDimensions && (options.maxWidth < 500 || options.maxHeight < 500)) {
+        error = "Refusing suspicious dimensions below 500px. Check --max-width/--max-height, or pass --allow-small-dimensions=1 intentionally.";
         return false;
     }
 
@@ -266,6 +276,7 @@ std::string cliUsage(const char* argv0)
         << "  --log=\n"
         << "  --verbose=0\n"
         << "  --process-png=0\n"
-        << "  --force-lock=0\n";
+        << "  --force-lock=0\n"
+        << "  --allow-small-dimensions=0\n";
     return out.str();
 }

@@ -285,6 +285,8 @@ int main(int argc, char** argv)
         + ", quality: " + std::to_string(options.quality), true);
     logger.info("Skip dimension resize below: " + std::to_string(options.skipDimensionResizeBelowKb) + " KB", true);
     logger.info(std::string("PNG processing: ") + (options.processPng ? "enabled" : "disabled"), true);
+    logger.info("Limit: " + std::to_string(options.limit) + " optimized/would optimize files", true);
+    logger.info("Log: " + (options.logPath.empty() ? std::string("(disabled)") : options.logPath.string()), true);
     if (options.dryRun) {
         logger.info("Dry run: files will not be replaced.", true);
     }

@@ -132,3 +132,11 @@ If another active optimizer process owns the lock, the tool exits. Use `--force-
 `--limit=0` means no limit. A positive limit counts only files that are actually optimized or would be optimized in dry-run mode, not scanned files.
 
 `--dry-run=1` still writes temporary encoded output to calculate the expected size, but deletes the temp file and does not replace originals.
+
+## Safety guard
+
+The tool refuses `--max-width` or `--max-height` below `500` by default. Product photos should not be resized to tiny thumbnail dimensions accidentally. If you intentionally need a smaller limit, pass:
+
+```powershell
+--allow-small-dimensions=1
+```

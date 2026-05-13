@@ -20,6 +20,7 @@ struct CliOptions {
     bool verbose = false;
     bool processPng = false;
     bool forceLock = false;
+    bool allowSmallDimensions = false;
 };
 
 bool parseCliOptions(int argc, char** argv, CliOptions& options, std::string& error, bool& showHelp);
