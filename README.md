@@ -21,7 +21,14 @@ OPTIMIZE SHOP IMAGES
 
 The `optimize-shop-images` console command compresses large imported product
 images in `frontend/web/upload/shop` without changing file names, extensions, or
-database records.
+database records. It optimizes files above `--minSizeKb` and also resizes any
+image that exceeds `--maxWidth` or `--maxHeight`, even when the file is smaller
+than `--minSizeKb`. Dimension-based replacements may grow the file by up to
+`--maxGrowthPercentForDimensions` percent; the default is `30`. PNG files are
+skipped to avoid increasing upload size during GD recompression. Images below
+`--skipDimensionResizeBelowKb` are not resized by dimensions; the default is
+`90`. Skipped image file names are printed by default; use `--showSkipped=0` to
+hide them on large runs.
 
 Test dry-run:
 
@@ -38,7 +45,7 @@ php yii optimize-shop-images
 Cron after import:
 
 ```
-php /path/to/project/yii optimize-shop-images --path=@frontend/web/upload/shop --minSizeKb=500 --maxWidth=1600 --maxHeight=1600 --quality=82 --pngCompression=8
+php /path/to/project/yii optimize-shop-images --path=@frontend/web/upload/shop --minSizeKb=500 --maxWidth=1600 --maxHeight=1600 --quality=82 --maxGrowthPercentForDimensions=30 --skipDimensionResizeBelowKb=90 --showSkipped=1
 ```
 
 DIRECTORY STRUCTURE
