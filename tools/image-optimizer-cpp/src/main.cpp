@@ -1,3 +1,4 @@
+#include "CacheOne.h"
 #include "CliOptions.h"
 #include "FileScanner.h"
 #include "ImageOptimizer.h"
@@ -232,6 +233,10 @@ void printSummary(const CliOptions& options, const Stats& stats, Logger& logger,
 
 int main(int argc, char** argv)
 {
+    if (argc > 1 && std::string(argv[1]) == "cache-one") {
+        return runCacheOne(argc - 1, argv + 1);
+    }
+
     CliOptions options;
     std::string error;
     bool showHelp = false;

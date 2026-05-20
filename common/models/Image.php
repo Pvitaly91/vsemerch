@@ -61,13 +61,19 @@ class Image extends ActiveRecord
      */
     public function rules()
     {
-        return [
+        $rules = [
             [['product_id'], 'integer'],
             [['product_id'], 'required'],
             ['image', 'image', 'skipOnEmpty' => true, 'extensions' => 'jpg, jpeg, gif, png'],
             [['alt'], 'required'],
             [['alt', 'alt_uk'], 'string', 'max' => 255],
         ];
+
+        if ($this->hasAttribute('remote_image_url')) {
+            $rules[] = [['remote_image_url'], 'string'];
+        }
+
+        return $rules;
     }
 
     public static function find()
@@ -94,6 +100,13 @@ class Image extends ActiveRecord
     public function getProduct()
     {
         return $this->hasOne(Product::className(), ['id' => 'product_id']);
+    }
+
+    public function getLazyPic($profile = 'thumb')
+    {
+        $profile = in_array($profile, ['original', 'thumb', 'ico'], true) ? $profile : 'thumb';
+
+        return '/img/product-image/' . (int)$this->id . '/' . $profile;
     }
 
 }

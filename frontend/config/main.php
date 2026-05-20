@@ -72,6 +72,8 @@ return [
 //
 
                 ''=>'site/index',
+                'img/product/<id:\d+>/<profile:[\w\-]+>' => 'image/product',
+                'img/product-image/<id:\d+>/<profile:[\w\-]+>' => 'image/product-image',
                 'gallery/<id:\d+>'=>'gallery/show',
                 'about'=>'text/about',
                 'contact'=>'text/contact',

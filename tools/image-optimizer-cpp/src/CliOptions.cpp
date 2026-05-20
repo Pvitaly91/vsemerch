@@ -261,6 +261,7 @@ std::string cliUsage(const char* argv0)
     std::ostringstream out;
     out << "Usage:\n"
         << "  " << argv0 << " --path <directory> [options]\n\n"
+        << "  " << argv0 << " cache-one --remote-url <url> --target <file> --thumb-dir <directory> --profiles <name:WxH,...> --lock <file> [options]\n\n"
         << "Options:\n"
         << "  --path <directory>\n"
         << "  --min-size-kb=400\n"

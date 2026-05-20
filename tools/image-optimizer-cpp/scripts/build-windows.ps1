@@ -1,6 +1,7 @@
 param(
     [string]$VcpkgRoot = $env:VCPKG_ROOT,
     [string]$VipsRoot = "",
+    [string]$CurlRoot = "",
     [string]$BuildDir = ""
 )
 
@@ -50,12 +51,22 @@ if ($VcpkgRoot) {
     throw "Set VCPKG_ROOT or pass -VcpkgRoot C:\vcpkg. As a fallback, pass -VipsRoot <vips-dev directory>."
 }
 
+if ($CurlRoot) {
+    $ConfigureArgs += "-DCURL_ROOT=$CurlRoot"
+}
+
 if ($VipsRoot -and -not $VcpkgRoot) {
     Write-Host "Using VIPS_ROOT fallback: $VipsRoot"
 }
 
 & $CMake @ConfigureArgs
+if ($LASTEXITCODE -ne 0) {
+    throw "CMake configure failed with exit code $LASTEXITCODE."
+}
 
 & $CMake --build $BuildDir --config Release --parallel
+if ($LASTEXITCODE -ne 0) {
+    throw "CMake build failed with exit code $LASTEXITCODE."
+}
 
 Write-Host "Built: $(Join-Path $BuildDir 'Release\vsemerch-image-optimizer.exe')"

@@ -49,3 +49,4 @@
 /frontend/web/files/
 /frontend/web/catalogpdf/
 /vendor/yiisoft/yii2/console/runtime/
+/tools/image-optimizer-cpp/build/

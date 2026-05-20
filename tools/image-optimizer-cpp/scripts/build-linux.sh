@@ -8,7 +8,11 @@ BUILD_DIR="${1:-${TOOL_ROOT}/build}"
 command -v cmake >/dev/null || { echo "cmake was not found" >&2; exit 1; }
 command -v pkg-config >/dev/null || { echo "pkg-config was not found" >&2; exit 1; }
 pkg-config --exists vips || {
-  echo "libvips development files were not found. Install: sudo apt install -y build-essential cmake pkg-config libvips-dev" >&2
+  echo "libvips development files were not found. Install: sudo apt install -y build-essential cmake pkg-config libvips-dev libcurl4-openssl-dev" >&2
+  exit 1
+}
+pkg-config --exists libcurl || {
+  echo "libcurl development files were not found. Install: sudo apt install -y libcurl4-openssl-dev" >&2
   exit 1
 }
 

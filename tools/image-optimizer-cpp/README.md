@@ -18,10 +18,10 @@ PNG is skipped by default (`--process-png=0`) to match the current PHP optimizer
 
 ## Windows build, Visual Studio 2022
 
-Install the dependency with vcpkg:
+Install the dependencies with vcpkg:
 
 ```powershell
-vcpkg install libvips:x64-windows
+vcpkg install libvips curl:x64-windows
 ```
 
 Build:
@@ -37,6 +37,8 @@ If your current vcpkg registry does not contain a libvips port, the script also 
 .\scripts\build-windows.ps1 -VipsRoot "$env:LOCALAPPDATA\Microsoft\WinGet\Packages\libvips.libvips_Microsoft.Winget.Source_8wekyb3d8bbwe\vips-dev-8.18"
 ```
 
+`cache-one` also links libcurl. The vcpkg route is recommended because it supplies both libvips and curl. When using `-VipsRoot`, make sure a compatible curl development library is available to CMake, or pass `-CurlRoot <curl-dev directory>`.
+
 The binary is written to:
 
 ```text
@@ -48,7 +50,7 @@ tools\image-optimizer-cpp\build\Release\vsemerch-image-optimizer.exe
 Install dependencies:
 
 ```bash
-sudo apt install -y build-essential cmake pkg-config libvips-dev
+sudo apt install -y build-essential cmake pkg-config libvips-dev libcurl4-openssl-dev
 ```
 
 Build:
@@ -78,6 +80,40 @@ Dry run example:
 
 ```powershell
 .\build\Release\vsemerch-image-optimizer.exe --path "D:\DEV\htdocs\vsemerch.loc\console\runtime\image-optimizer-cpp-test\shop" --dry-run=1 --limit=100 --threads=4 --show-skipped=1
+```
+
+## One-shot lazy cache mode
+
+`cache-one` downloads one remote image, optimizes it, writes the target through a temp file plus safe rename, creates thumbnails, removes temp files, removes the supplied lock file, and exits.
+
+Windows example:
+
+```powershell
+.\build\Release\vsemerch-image-optimizer.exe cache-one `
+  --remote-url "https://partner.example/photo.jpg" `
+  --target "D:\DEV\htdocs\vsemerch.loc\frontend\web\upload\shop\products\12345.jpg" `
+  --thumb-dir "D:\DEV\htdocs\vsemerch.loc\frontend\web\upload\shop\products\thumb" `
+  --profiles "thumb:300x300,preview:400x400" `
+  --max-width 1200 `
+  --max-height 1200 `
+  --quality 75 `
+  --lock "D:\DEV\htdocs\vsemerch.loc\frontend\runtime\image-cache\locks\product-12345-preview.lock" `
+  --log "D:\DEV\htdocs\vsemerch.loc\frontend\runtime\image-cache\logs\product-12345-preview.log"
+```
+
+Linux example:
+
+```bash
+./build/vsemerch-image-optimizer cache-one \
+  --remote-url "https://partner.example/photo.jpg" \
+  --target "/mnt/vsemerch-200/www/agcity/agcity.com.ua/frontend/web/upload/shop/products/12345.jpg" \
+  --thumb-dir "/mnt/vsemerch-200/www/agcity/agcity.com.ua/frontend/web/upload/shop/products/thumb" \
+  --profiles "thumb:300x300,preview:400x400" \
+  --max-width 1200 \
+  --max-height 1200 \
+  --quality 75 \
+  --lock "/mnt/vsemerch-200/www/agcity/agcity.com.ua/frontend/runtime/image-cache/locks/product-12345-preview.lock" \
+  --log "/mnt/vsemerch-200/www/agcity/agcity.com.ua/frontend/runtime/image-cache/logs/product-12345-preview.log"
 ```
 
 ## Full folder run

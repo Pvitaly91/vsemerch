@@ -110,7 +110,7 @@ class Product extends ActiveRecord implements CartPositionInterface
      */
     public function rules()
     {
-        return [
+        $rules = [
             [['category_id', 'action', 'novelty', 'not_available', 'is_main'], 'integer'],
             [['price', 'price_old'], 'number'],
             [['code','sku_group','partner_id','partner'], 'string', 'max' => 250],
@@ -123,6 +123,12 @@ class Product extends ActiveRecord implements CartPositionInterface
             [['meta_title', 'meta_title_uk'], 'string', 'max' => 255],
             [['meta_description', 'meta_description_uk'], 'string', 'max' => 255],
         ];
+
+        if ($this->hasAttribute('remote_image_url')) {
+            $rules[] = [['remote_image_url'], 'string'];
+        }
+
+        return $rules;
     }
 
     public function beforeSave($insert)
@@ -275,6 +281,13 @@ class Product extends ActiveRecord implements CartPositionInterface
             $file = $emptyUrl;
         }
         return $file;
+    }
+
+    public function getLazyPic($profile = 'preview')
+    {
+        $profile = in_array($profile, ['original', 'preview', 'thumb'], true) ? $profile : 'preview';
+
+        return '/img/product/' . (int)$this->id . '/' . $profile;
     }
 
 
