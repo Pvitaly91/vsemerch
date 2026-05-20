@@ -2,6 +2,10 @@
 
 #include "SafeReplace.h"
 
+#ifdef _WIN32
+#define NOMINMAX
+#endif
+
 #include <algorithm>
 #include <cctype>
 #include <chrono>
@@ -174,6 +178,12 @@ std::runtime_error vipsError(const std::string& fallback)
     std::string message = buffer != nullptr && *buffer != '\0' ? buffer : fallback;
     vips_error_clear();
     return std::runtime_error(message);
+}
+
+std::string pathToVips(const fs::path& path)
+{
+    const auto value = path.generic_u8string();
+    return std::string(value.begin(), value.end());
 }
 
 bool parseInt(std::string_view value, int& out)
@@ -547,9 +557,9 @@ void downloadRemoteImage(const CacheOneOptions& options, const fs::path& tempPat
 VipsImagePtr loadImage(const fs::path& path)
 {
     VipsImage* loaded = vips_image_new_from_file(
-        vsemerch::pathToUtf8(path).c_str(),
+        pathToVips(path).c_str(),
         "access",
-        VIPS_ACCESS_SEQUENTIAL,
+        VIPS_ACCESS_RANDOM,
         nullptr);
     if (loaded == nullptr) {
         throw vipsError("cannot read image");
@@ -594,7 +604,7 @@ VipsImagePtr resizeToFit(VipsImage* image, int maxWidth, int maxHeight)
 
 void saveImage(const std::string& extension, const fs::path& path, VipsImage* image, int quality)
 {
-    const std::string target = vsemerch::pathToUtf8(path);
+    const std::string target = pathToVips(path);
     if (extension == "jpg" || extension == "jpeg") {
         if (vips_jpegsave(
                 image,
@@ -720,13 +730,12 @@ int runCacheOne(int argc, char** argv)
         downloadRemoteImage(options, downloadTemp, logger);
 
         VipsImagePtr image = loadImage(downloadTemp);
-        vsemerch::removeQuietly(downloadTemp);
-
         VipsImagePtr optimized = resizeToFit(image.get(), options.maxWidth, options.maxHeight);
         safeSaveImage(options.target, optimized.get(), options.quality);
         logger.info("Saved target: " + options.target.string());
 
         createThumbnails(options, optimized.get(), logger);
+        vsemerch::removeQuietly(downloadTemp);
         logger.info("cache-one complete");
         return 0;
     } catch (const std::exception& e) {
