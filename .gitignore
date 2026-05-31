@@ -43,6 +43,7 @@
 /console/runtime/
 /console/runtime*
 /frontend/runtime/
+/runtime/
 /backend/web/assets/
 /frontend/web/assets/
 /frontend/web/upload/

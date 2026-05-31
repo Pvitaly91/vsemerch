@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\Helpers\ShopImageStorage;
 use common\components\MultilingualQuery;
 use lhs\Yii2SaveRelationsBehavior\SaveRelationsBehavior;
 use lhs\Yii2SaveRelationsBehavior\SaveRelationsTrait;
@@ -275,9 +276,9 @@ class Product extends ActiveRecord implements CartPositionInterface
 
     public function getPic($attribute, $profile = 'thumb', $emptyUrl = null)
     {
-        $file = $this->getThumbFileUrl($attribute, $profile, $emptyUrl);
-       
-        if(!is_file(Yii::getAlias('@frontend/web' . $file))) {
+        $file = $this->getThumbFileUrl($attribute, $profile, null);
+
+        if(!$file || (!ShopImageStorage::isPartitionedPartner($this->partner) && !is_file(Yii::getAlias('@frontend/web' . $file)))) {
             $file = $emptyUrl;
         }
         return $file;
@@ -286,8 +287,151 @@ class Product extends ActiveRecord implements CartPositionInterface
     public function getLazyPic($profile = 'preview')
     {
         $profile = in_array($profile, ['original', 'preview', 'thumb'], true) ? $profile : 'preview';
+        $extension = ShopImageStorage::extensionFromImageValue($this->image);
+        if (!$extension) {
+            return '/img/no_image.jpg';
+        }
 
-        return '/img/product/' . (int)$this->id . '/' . $profile;
+        if ($profile === 'original') {
+            return ShopImageStorage::legacyProductImageUrl($this->id, $extension);
+        }
+
+        return ShopImageStorage::legacyProductThumbUrl($this->id, $extension, $profile);
+    }
+
+    public function getImageFileUrl($attribute, $emptyUrl = null)
+    {
+        if (!$this->$attribute) {
+            return $emptyUrl;
+        }
+
+        $extension = ShopImageStorage::extensionFromImageValue($this->$attribute);
+        if (!$extension) {
+            return $emptyUrl;
+        }
+
+        $legacyUrl = ShopImageStorage::legacyProductImageUrl($this->id, $extension);
+
+        if (ShopImageStorage::isPartitionedPartner($this->partner)) {
+            return ShopImageStorage::legacyUrlWithPartnerFallback(
+                ShopImageStorage::legacyProductImageUrl($this->id, $extension),
+                ShopImageStorage::productImageUrl($this->id, $extension, $this->partner),
+                $emptyUrl
+            );
+        }
+
+        return $legacyUrl;
+    }
+
+    public function getThumbFileUrl($attribute, $profile = 'thumb', $emptyUrl = null)
+    {
+        if (!$this->$attribute) {
+            return $emptyUrl;
+        }
+
+        $extension = ShopImageStorage::extensionFromImageValue($this->$attribute);
+        if (!$extension) {
+            return $emptyUrl;
+        }
+
+        $legacyUrl = ShopImageStorage::legacyProductThumbUrl($this->id, $extension, $profile);
+
+        if (ShopImageStorage::isPartitionedPartner($this->partner)) {
+            return ShopImageStorage::legacyUrlWithPartnerFallback(
+                ShopImageStorage::legacyProductThumbUrl($this->id, $extension, $profile),
+                ShopImageStorage::productThumbUrl($this->id, $extension, $profile, $this->partner),
+                $emptyUrl
+            );
+        }
+
+        return $legacyUrl;
+    }
+
+    public function getGalleryImages()
+    {
+        $images = $this->images;
+
+        if (!ShopImageStorage::isPartitionedPartner($this->partner)) {
+            return array_values(array_filter($images, function ($image) {
+                return $this->isGalleryImageResolvable($image);
+            }));
+        }
+
+        $skuCodes = $this->getSkuGroupCodesForGalleryFilter();
+        if (!$skuCodes) {
+            return array_values(array_filter($images, function ($image) {
+                return $this->isGalleryImageResolvable($image);
+            }));
+        }
+
+        return array_values(array_filter($images, function ($image) use ($skuCodes) {
+            $name = pathinfo(parse_url((string)$image->image, PHP_URL_PATH) ?: (string)$image->image, PATHINFO_FILENAME);
+            $name = strtoupper(trim($name));
+
+            return ($name === '' || !isset($skuCodes[$name])) && $this->isGalleryImageResolvable($image);
+        }));
+    }
+
+    private function isGalleryImageResolvable(Image $image)
+    {
+        if (!$image->image) {
+            return false;
+        }
+
+        $remote = $image->hasAttribute('remote_image_url') ? trim((string)$image->remote_image_url) : '';
+        if ($this->isRemoteImageUrl($remote) || $this->isRemoteImageUrl((string)$image->image)) {
+            return true;
+        }
+
+        $extension = ShopImageStorage::extensionFromImageValue($image->image);
+        if (!$extension) {
+            return false;
+        }
+
+        $legacyUrl = ShopImageStorage::legacyGalleryImageUrl($image->id, $extension);
+        if (is_file(Yii::getAlias('@frontend/web' . $legacyUrl))) {
+            return true;
+        }
+
+        if (ShopImageStorage::isPartitionedPartner($this->partner)) {
+            return is_file(Yii::getAlias('@frontend/web' . ShopImageStorage::galleryImageUrl($image->id, $extension, $this->partner)));
+        }
+
+        return false;
+    }
+
+    private function isRemoteImageUrl(string $url)
+    {
+        $scheme = strtolower((string)parse_url(trim($url), PHP_URL_SCHEME));
+
+        return in_array($scheme, ['http', 'https', 'ftp'], true);
+    }
+
+    private function getSkuGroupCodesForGalleryFilter()
+    {
+        $skuGroup = trim((string)$this->sku_group);
+        if ($skuGroup === '') {
+            return [];
+        }
+
+        $codes = self::find()
+            ->select('code')
+            ->where([
+                'partner' => $this->partner,
+                'sku_group' => $skuGroup,
+                'not_active' => 0,
+            ])
+            ->column();
+
+        $result = [];
+        foreach ($codes as $code) {
+            $code = strtoupper(trim((string)$code));
+            if ($code !== '') {
+                $result[$code] = true;
+            }
+        }
+
+        return $result;
     }
 
 

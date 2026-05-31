@@ -132,9 +132,11 @@ $flag = 1;//(isset($_GET["flag"])) ? 1 : 0;
         $breadcrumbs[] = [
             "label" => Yii::t('shop', 'Shop')
         ];
-        $breadcrumbs[] = [
-            "label" => $prentCategoryName
-        ];
+        if ($prentCategoryName) {
+            $breadcrumbs[] = [
+                "label" => $prentCategoryName
+            ];
+        }
         $breadcrumbs[] = [
             "link" => \yii\helpers\Url::to(['catalog/list', 'slug' => $model->category->slug, 'id' => $model->category->id]),
             "label" => $model->category->title

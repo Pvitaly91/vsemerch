@@ -32,8 +32,11 @@ class ProductController extends \yii\web\Controller
             }         
         }
         $model = $model->one();
-   
-       
+
+        if(!$model) {
+            throw new NotFoundHttpException('Данного товара нет!');
+        }
+
       //  dd($model->category_id);
        if(!\common\Helpers\Partners::isAdmin()){
             foreach (\common\Helpers\Partners::$partners as $partnerSlug => $partnerName) {
@@ -58,16 +61,13 @@ class ProductController extends \yii\web\Controller
        }
        // dd($mainPartnerCatId);
         //$mainPartnerCatId = Category::find()->where([""])  
-        if(!$model) {
-            throw new NotFoundHttpException('Данного товара нет!');
-        }
         $model->description = strip_tags($model->description,$this->allowedTags);
         $canonical =  Url::canonical();
         $model->checkAvaiableSize(); 
         $skus = $this->makeSKU($model,$canonical);
         //
-        $parentCat = Category::find()->where(["id" => $model->category->parent_id])->select(["id"])->one();
-        $prentCategoryName = $parentCat->title;
+        $parentCategory = $model->category ? $model->category->parent : null;
+        $prentCategoryName = $parentCategory ? $parentCategory->title : null;
       //  $model->normalizeFoto();
         return $this->render('view', [
             "canonical" => $canonical,

@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\Helpers\ShopImageStorage;
 use common\components\MultilingualQuery;
 use navatech\language\Translate;
 use omgdef\multilingual\MultilingualBehavior;
@@ -105,8 +106,64 @@ class Image extends ActiveRecord
     public function getLazyPic($profile = 'thumb')
     {
         $profile = in_array($profile, ['original', 'thumb', 'ico'], true) ? $profile : 'thumb';
+        $extension = ShopImageStorage::extensionFromImageValue($this->image);
+        if (!$extension) {
+            return '/img/no_image.jpg';
+        }
 
-        return '/img/product-image/' . (int)$this->id . '/' . $profile;
+        if ($profile === 'original') {
+            return ShopImageStorage::legacyGalleryImageUrl($this->id, $extension);
+        }
+
+        return ShopImageStorage::legacyGalleryThumbUrl($this->id, $extension, $profile);
+    }
+
+    public function getImageFileUrl($attribute, $emptyUrl = null)
+    {
+        if (!$this->$attribute) {
+            return $emptyUrl;
+        }
+
+        $extension = ShopImageStorage::extensionFromImageValue($this->$attribute);
+        if (!$extension) {
+            return $emptyUrl;
+        }
+
+        $partner = ShopImageStorage::partnerForProductId($this->product_id);
+        $legacyUrl = ShopImageStorage::legacyGalleryImageUrl($this->id, $extension);
+        if (ShopImageStorage::isPartitionedPartner($partner)) {
+            return ShopImageStorage::legacyUrlWithPartnerFallback(
+                $legacyUrl,
+                ShopImageStorage::galleryImageUrl($this->id, $extension, $partner),
+                $emptyUrl
+            );
+        }
+
+        return $legacyUrl;
+    }
+
+    public function getThumbFileUrl($attribute, $profile = 'thumb', $emptyUrl = null)
+    {
+        if (!$this->$attribute) {
+            return $emptyUrl;
+        }
+
+        $extension = ShopImageStorage::extensionFromImageValue($this->$attribute);
+        if (!$extension) {
+            return $emptyUrl;
+        }
+
+        $partner = ShopImageStorage::partnerForProductId($this->product_id);
+        $legacyUrl = ShopImageStorage::legacyGalleryThumbUrl($this->id, $extension, $profile);
+        if (ShopImageStorage::isPartitionedPartner($partner)) {
+            return ShopImageStorage::legacyUrlWithPartnerFallback(
+                $legacyUrl,
+                ShopImageStorage::galleryThumbUrl($this->id, $extension, $profile, $partner),
+                $emptyUrl
+            );
+        }
+
+        return $legacyUrl;
     }
 
 }

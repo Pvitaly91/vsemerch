@@ -1,6 +1,7 @@
 <?
 namespace common\models\traits;
 
+use common\Helpers\ShopImageStorage;
 use console\models\Image;
 use console\models\ImageTranslate;
 use common\models\Language;
@@ -50,20 +51,30 @@ trait Images {
      }
     function getOrignalImgPath($id,$extention = "jpg"){
         
-        return Yii::getAlias('@frontend/web/upload/shop/products/' .$id.".".$extention);
+        return ShopImageStorage::productImagePath($id, $extention, ShopImageStorage::partnerForProductId($id));
     }
     function normalizeOriginalFoto($src,$dist,$flag = false){
-       
+
      //   $_path = $path = $this->getOrignalImgPath($this->id);
     //   $path = $this->image;
-        $sizes = getimagesize($src);
+        $this->ensureImageDirectory($dist);
+        $sizes = @getimagesize($src);
+        if (!$sizes || empty($sizes[0]) || empty($sizes[1])) {
+            Yii::warning("Cannot read image size: $src");
+            return false;
+        }
+
         $w = $sizes[0];
         $h = $sizes[1];
         $k = $w/$h;
      //  echo $src." ".$dist."\r\n";
         if($flag == false && ($k > 0.7) && ($k < 1.3)){
-            copy($src, $dist);
-            return;
+            if (!copy($src, $dist)) {
+                Yii::warning("Cannot copy image: $src -> $dist");
+                return false;
+            }
+            $this->optimizeImportedImageFile($dist);
+            return true;
         }
 
         if($w < $h)
@@ -77,63 +88,72 @@ trait Images {
     //  exit;
         if (true /* file_exists($src) */) {
 
-			$mime = @mime_content_type($src);
+            $mime = $sizes['mime'] ?? @mime_content_type($src);
 
-			// Перевірка, що це взагалі картинка
-			if (!$mime || strpos($mime, 'image/') !== 0) {
-				Yii::warning("Skipping invalid image type: $src");
-				return false;
-			}
+            // Перевірка, що це взагалі картинка
+            if (!$mime || strpos($mime, 'image/') !== 0) {
+                Yii::warning("Skipping invalid image type: $src");
+                return false;
+            }
 
-			switch ($mime) {
-				case 'image/jpeg':
-					$existingImage = @imagecreatefromjpeg($src);
-					break;
-				case 'image/png':
-					$existingImage = @imagecreatefrompng($src);
-					break;
-				case 'image/webp':
-					if (function_exists('imagecreatefromwebp')) {
-						$existingImage = @imagecreatefromwebp($src);
-					} else {
-						Yii::warning("WEBP not supported. Skipping: $src");
-						return false;
-					}
-					break;
-				default:
-					Yii::warning("Unsupported image type ($mime). Skipping: $src");
-					return false;
-			}
+            switch ($mime) {
+                case 'image/jpeg':
+                    $existingImage = @imagecreatefromjpeg($src);
+                    break;
+                case 'image/png':
+                    $existingImage = @imagecreatefrompng($src);
+                    break;
+                case 'image/webp':
+                    if (function_exists('imagecreatefromwebp')) {
+                        $existingImage = @imagecreatefromwebp($src);
+                    } else {
+                        Yii::warning("WEBP not supported. Skipping: $src");
+                        return false;
+                    }
+                    break;
+                default:
+                    Yii::warning("Unsupported image type ($mime). Skipping: $src");
+                    return false;
+            }
 
-			// Якщо GD не зміг відкрити картинку
-			if (!$existingImage) {
-				Yii::warning("Unable to decode image. Skipping: $src");
-				return false;
-			}
+            // Якщо GD не зміг відкрити картинку
+            if (!$existingImage) {
+                Yii::warning("Unable to decode image. Skipping: $src");
+                return false;
+            }
 
-			// Створюємо результуюче зображення за твоєю логікою
-			$newImage = imagecreatetruecolor($w, $h);
-			$white = imagecolorallocate($newImage, 255, 255, 255);
-			imagefill($newImage, 0, 0, $white);
+            // Створюємо результуюче зображення за твоєю логікою
+            $newImage = imagecreatetruecolor($w, $h);
+            $white = imagecolorallocate($newImage, 255, 255, 255);
+            imagefill($newImage, 0, 0, $white);
 
-			$existingWidth = imagesx($existingImage);
-			$existingHeight = imagesy($existingImage);
+            $existingWidth = imagesx($existingImage);
+            $existingHeight = imagesy($existingImage);
 
-			$destX = ($w - $existingWidth) / 2;
-			$destY = ($h - $existingHeight) / 2;
+            $destX = ($w - $existingWidth) / 2;
+            $destY = ($h - $existingHeight) / 2;
 
-			imagecopy($newImage, $existingImage,
-				$destX, $destY,
-				0, 0,
-				$existingWidth, $existingHeight
-			);
+            imagecopy($newImage, $existingImage,
+                $destX, $destY,
+                0, 0,
+                $existingWidth, $existingHeight
+            );
 
-			imagejpeg($newImage, $dist, 85);
+            $saved = $this->saveImportedImage($newImage, $dist, $this->extensionFromPath($dist), 85);
 
-			imagedestroy($existingImage);
-			imagedestroy($newImage);
-		}
+            imagedestroy($existingImage);
+            imagedestroy($newImage);
 
+            if (!$saved) {
+                Yii::warning("Cannot save image: $dist");
+                return false;
+            }
+
+            $this->optimizeImportedImageFile($dist);
+            return true;
+        }
+
+        return false;
     }
     function normalizeFoto(){
         if($this->isAdmin()){
@@ -159,10 +179,10 @@ trait Images {
         if(!empty($this->image)){
             $parts = explode(".",$this->image);
            
-            $path = "/upload/shop/products/".$this->id.".".end($parts);
-           // return $path;
-           
-            if(file_exists(\Yii::$app->basePath."/web".$path))
+            $path = $this->getImageFileUrl('image');
+
+            $partner = method_exists($this, 'hasAttribute') && $this->hasAttribute('partner') ? $this->partner : null;
+            if($path && (ShopImageStorage::isPartitionedPartner($partner) || file_exists(Yii::getAlias('@frontend/web' . $path))))
                 return $path;
             else
                 return $this->getPic('image', 'preview', '/img/no_image.jpg');
@@ -170,9 +190,12 @@ trait Images {
         
     }
      protected function fileUrlData($url) {
-        $arr = explode('/', $url);
-        $name = $arr[count($arr) - 1];
-        $extension = substr(strrchr($name, '.'), 1);
+        $path = parse_url($url, PHP_URL_PATH);
+        if (!$path) {
+            $path = $url;
+        }
+        $name = urldecode(basename($path));
+        $extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
         return [
             'name' => $name,
             'extension' => $extension
@@ -207,6 +230,7 @@ trait Images {
     function copyFtpFile(&$picture,&$image){
         if(!empty($picture) && !file_exists($image) && property_exists($this, 'ftpLogin') && property_exists($this, 'ftpConect') && $this->ftpLogin){
             try {
+                $this->ensureImageDirectory($image);
                 ftp_get($this->ftpConect, $image, $picture, FTP_BINARY);
                 
             } catch (\Exception $e) {
@@ -230,7 +254,8 @@ trait Images {
             $image = $fileData['name'];
         }
       //  var_dump($fileData);
-        $image = Yii::getAlias('@frontend/web/upload/shop/products/' . $id . '.' . $fileData['extension']);
+        $partner = ShopImageStorage::partnerForProductId($id);
+        $image = ShopImageStorage::productImagePath($id, $fileData['extension'], $partner);
         
         
      
@@ -239,8 +264,8 @@ trait Images {
             $this->normalizeOriginalFoto($picture,$image);
          
                 $thumbFilePath = [
-                    'thumb' => Yii::getAlias('@frontend/web/upload/shop/products/thumb/thumb_' . $id . '.' . $fileData['extension']),
-                    'preview' => Yii::getAlias('@frontend/web/upload/shop/products/thumb/preview_' . $id. '.' . $fileData['extension']),
+                    'thumb' => ShopImageStorage::productThumbPath($id, $fileData['extension'], 'thumb', $partner),
+                    'preview' => ShopImageStorage::productThumbPath($id, $fileData['extension'], 'preview', $partner),
                 ];
                 
                 $this->createThumbs($image, $thumbFilePath, $this->thumbs);
@@ -278,7 +303,8 @@ trait Images {
                     $modelImageTranslate->alt = '';
                     $modelImageTranslate->save(false);
                 }
-                $image = Yii::getAlias('@frontend/web/upload/shop/products/image/' . $modelImage->id . '.' . $fileData['extension']);
+                $partner = ShopImageStorage::partnerForProductId($id);
+                $image = ShopImageStorage::galleryImagePath($modelImage->id, $fileData['extension'], $partner);
                     
                 if ($this->copyFtpFile($pic,$image) || !file_exists($image) && isset($fileData['extension']) && $fileData['extension'] != "" && $this->isFile($pic)) {
                        $this->normalizeOriginalFoto($pic,$image);
@@ -287,8 +313,8 @@ trait Images {
                      //   copy($pic, $image, stream_context_create($this->arrContextOptions));
 
                         $thumbFilePath = [
-                            'thumb' => Yii::getAlias('@frontend/web/upload/shop/products/image/thumb/thumb_' . $modelImage->id . '.' . $fileData['extension']),
-                            'ico' => Yii::getAlias('@frontend/web/upload/shop/products/image/thumb/ico_' . $modelImage->id . '.' . $fileData['extension']),
+                            'thumb' => ShopImageStorage::galleryThumbPath($modelImage->id, $fileData['extension'], 'thumb', $partner),
+                            'ico' => ShopImageStorage::galleryThumbPath($modelImage->id, $fileData['extension'], 'ico', $partner),
                         ];
                         $this->createThumbs($image, $thumbFilePath, $this->ico);
                  //   }
@@ -303,5 +329,243 @@ trait Images {
                         [':product_id' => $id]);
             }
         }    
+    }
+
+    protected function optimizeImportedImageFile($filePath)
+    {
+        if (!is_file($filePath) || !extension_loaded('gd')) {
+            return false;
+        }
+
+        $options = $this->importedImageOptimizerOptions();
+        $extension = $this->extensionFromPath($filePath);
+        if (!in_array($extension, ['jpg', 'jpeg', 'webp'], true)) {
+            return false;
+        }
+        if ($extension === 'webp' && !function_exists('imagecreatefromwebp')) {
+            return false;
+        }
+
+        clearstatcache(true, $filePath);
+        $originalSize = filesize($filePath);
+        if ($originalSize === false || $originalSize <= 0) {
+            return false;
+        }
+
+        $sizes = @getimagesize($filePath);
+        if (!$sizes || empty($sizes[0]) || empty($sizes[1])) {
+            return false;
+        }
+
+        $width = (int)$sizes[0];
+        $height = (int)$sizes[1];
+        $tooLargeByDimensions = $width > $options['maxWidth'] || $height > $options['maxHeight'];
+        if ($tooLargeByDimensions && $originalSize < $options['skipDimensionResizeBelowBytes']) {
+            return false;
+        }
+        if (!($originalSize > $options['minBytes'] || $tooLargeByDimensions)) {
+            return false;
+        }
+
+        $image = $this->loadImportedImage($filePath, $extension);
+        if (!$image) {
+            return false;
+        }
+
+        $target = $this->calculateImportedImageTargetSize($width, $height, $options['maxWidth'], $options['maxHeight']);
+        $resized = $target['width'] !== $width || $target['height'] !== $height;
+        if ($resized) {
+            $resizedImage = imagecreatetruecolor($target['width'], $target['height']);
+            if (!imagecopyresampled($resizedImage, $image, 0, 0, 0, 0, $target['width'], $target['height'], $width, $height)) {
+                imagedestroy($resizedImage);
+                imagedestroy($image);
+                return false;
+            }
+            imagedestroy($image);
+            $image = $resizedImage;
+        }
+
+        $tmpPath = $filePath . '.import-opt-' . getmypid() . '-' . uniqid('', true);
+        $saved = $this->saveImportedImage($image, $tmpPath, $extension, $options['quality']);
+        imagedestroy($image);
+
+        if (!$saved || !is_file($tmpPath)) {
+            @unlink($tmpPath);
+            return false;
+        }
+
+        clearstatcache(true, $tmpPath);
+        $newSize = filesize($tmpPath);
+        if ($newSize === false || $newSize <= 0) {
+            @unlink($tmpPath);
+            return false;
+        }
+
+        $savingRatio = ($originalSize - $newSize) / $originalSize;
+        $canReplaceBySaving = $originalSize > $options['minBytes']
+            && $newSize < $originalSize
+            && $savingRatio >= 0.05;
+        $canReplaceByDimensions = $tooLargeByDimensions
+            && $resized
+            && $target['width'] <= $options['maxWidth']
+            && $target['height'] <= $options['maxHeight']
+            && $newSize <= $originalSize * (1 + ($options['maxGrowthPercentForDimensions'] / 100));
+
+        if (!$canReplaceBySaving && !$canReplaceByDimensions) {
+            @unlink($tmpPath);
+            return false;
+        }
+
+        if (!$this->replaceImportedImageFile($filePath, $tmpPath)) {
+            @unlink($tmpPath);
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function importedImageOptimizerOptions()
+    {
+        return [
+            'minBytes' => 400 * 1024,
+            'maxWidth' => 1200,
+            'maxHeight' => 1200,
+            'quality' => 75,
+            'maxGrowthPercentForDimensions' => 30,
+            'skipDimensionResizeBelowBytes' => 90 * 1024,
+        ];
+    }
+
+    protected function extensionFromPath($path)
+    {
+        $extension = strtolower(pathinfo(parse_url($path, PHP_URL_PATH) ?: $path, PATHINFO_EXTENSION));
+        return $extension === 'jpe' ? 'jpg' : $extension;
+    }
+
+    protected function loadImportedImage($filePath, $extension)
+    {
+        if ($extension === 'jpg' || $extension === 'jpeg') {
+            $image = @imagecreatefromjpeg($filePath);
+            return $this->applyImportedJpegOrientation($image, $filePath);
+        }
+
+        if ($extension === 'webp' && function_exists('imagecreatefromwebp')) {
+            return @imagecreatefromwebp($filePath);
+        }
+
+        if ($extension === 'png') {
+            return @imagecreatefrompng($filePath);
+        }
+
+        return false;
+    }
+
+    protected function applyImportedJpegOrientation($image, $filePath)
+    {
+        if (!$image || !function_exists('exif_read_data')) {
+            return $image;
+        }
+
+        $exif = @exif_read_data($filePath);
+        if (empty($exif['Orientation'])) {
+            return $image;
+        }
+
+        switch ((int)$exif['Orientation']) {
+            case 2:
+                imageflip($image, IMG_FLIP_HORIZONTAL);
+                break;
+            case 3:
+                $image = imagerotate($image, 180, 0);
+                break;
+            case 4:
+                imageflip($image, IMG_FLIP_VERTICAL);
+                break;
+            case 5:
+                imageflip($image, IMG_FLIP_HORIZONTAL);
+                $image = imagerotate($image, 270, 0);
+                break;
+            case 6:
+                $image = imagerotate($image, 270, 0);
+                break;
+            case 7:
+                imageflip($image, IMG_FLIP_HORIZONTAL);
+                $image = imagerotate($image, 90, 0);
+                break;
+            case 8:
+                $image = imagerotate($image, 90, 0);
+                break;
+        }
+
+        return $image;
+    }
+
+    protected function calculateImportedImageTargetSize($width, $height, $maxWidth, $maxHeight)
+    {
+        $scale = min($maxWidth / $width, $maxHeight / $height, 1);
+
+        return [
+            'width' => max(1, (int)round($width * $scale)),
+            'height' => max(1, (int)round($height * $scale)),
+        ];
+    }
+
+    protected function saveImportedImage($image, $path, $extension, $quality)
+    {
+        $this->ensureImageDirectory($path);
+        $extension = strtolower((string)$extension);
+
+        if ($extension === 'jpg' || $extension === 'jpeg') {
+            imageinterlace($image, true);
+            return imagejpeg($image, $path, $quality);
+        }
+
+        if ($extension === 'webp' && function_exists('imagewebp')) {
+            return imagewebp($image, $path, $quality);
+        }
+
+        if ($extension === 'png') {
+            imagealphablending($image, false);
+            imagesavealpha($image, true);
+            return imagepng($image, $path, 8);
+        }
+
+        return false;
+    }
+
+    protected function replaceImportedImageFile($filePath, $tmpPath)
+    {
+        $permissions = @fileperms($filePath);
+        $mtime = @filemtime($filePath);
+
+        if ($permissions !== false) {
+            @chmod($tmpPath, $permissions & 0777);
+        }
+        if ($mtime !== false) {
+            @touch($tmpPath, $mtime);
+        }
+
+        if (DIRECTORY_SEPARATOR === '\\') {
+            $backupPath = $filePath . '.import-opt-backup-' . getmypid() . '-' . uniqid('', true);
+            if (!@rename($filePath, $backupPath)) {
+                return false;
+            }
+            if (!@rename($tmpPath, $filePath)) {
+                @rename($backupPath, $filePath);
+                return false;
+            }
+            @unlink($backupPath);
+            return true;
+        }
+
+        return @rename($tmpPath, $filePath);
+    }
+
+    protected function ensureImageDirectory($filePath)
+    {
+        $dir = pathinfo($filePath, PATHINFO_DIRNAME);
+        if ($dir && !is_dir($dir)) {
+            FileHelper::createDirectory($dir, 0775, true);
+        }
     }
 }

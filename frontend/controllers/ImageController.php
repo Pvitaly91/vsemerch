@@ -122,7 +122,7 @@ class ImageController extends Controller
         }
 
         $target = $this->paths->getProductOriginalPath($product, $extension);
-        if (!$this->paths->isInside($target, $this->paths->getProductDir())) {
+        if (!$this->paths->isInside($target, $this->paths->getProductBaseDir())) {
             Yii::warning('Refusing image cache target outside products dir: ' . $target, __METHOD__);
             return;
         }
@@ -133,7 +133,7 @@ class ImageController extends Controller
             $profile,
             $remoteUrl,
             $target,
-            $this->paths->getProductThumbDir(),
+            $this->paths->getProductThumbDir($product),
             'thumb:300x300,preview:400x400'
         );
     }
@@ -145,7 +145,7 @@ class ImageController extends Controller
         }
 
         $target = $this->paths->getProductImageOriginalPath($image, $extension);
-        if (!$this->paths->isInside($target, $this->paths->getProductImageDir())) {
+        if (!$this->paths->isInside($target, $this->paths->getProductBaseDir())) {
             Yii::warning('Refusing image cache target outside product-image dir: ' . $target, __METHOD__);
             return;
         }
@@ -156,7 +156,7 @@ class ImageController extends Controller
             $profile,
             $remoteUrl,
             $target,
-            $this->paths->getProductImageThumbDir(),
+            $this->paths->getProductImageThumbDir($image),
             'thumb:400x400,ico:100x100'
         );
     }

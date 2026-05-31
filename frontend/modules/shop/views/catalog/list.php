@@ -171,16 +171,18 @@ $this->registerJsFile('/new/js/focus/focus.js',['position'=>View::POS_END]);
             >
                 <path d="M1 1L4 3.76923L1 7" stroke="#989898" stroke-linecap="round" />
             </svg>
-            <p><?=$prentCategoryName ?></p>
-             <svg
-                width="5"
-                height="8"
-                viewBox="0 0 5 8"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-                <path d="M1 1L4 3.76923L1 7" stroke="#989898" stroke-linecap="round" />
-            </svg>
+            <? if ($prentCategoryName): ?>
+                <p><?=$prentCategoryName ?></p>
+                <svg
+                    width="5"
+                    height="8"
+                    viewBox="0 0 5 8"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path d="M1 1L4 3.76923L1 7" stroke="#989898" stroke-linecap="round" />
+                </svg>
+            <? endif; ?>
             <p><?=$title?></p>
         </div>
         <div class="sort-titles-block">

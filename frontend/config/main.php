@@ -72,8 +72,14 @@ return [
 //
 
                 ''=>'site/index',
-                'img/product/<id:\d+>/<profile:[\w\-]+>' => 'image/product',
-                'img/product-image/<id:\d+>/<profile:[\w\-]+>' => 'image/product-image',
+                'upload/shop/products/image/thumb/<file:[A-Za-z0-9_\.-]+>' => 'shop-image/gallery-thumb',
+                'upload/shop/products/image/<file:[A-Za-z0-9_\.-]+>' => 'shop-image/gallery',
+                'upload/shop/products/thumb/<file:[A-Za-z0-9_\.-]+>' => 'shop-image/product-thumb',
+                'upload/shop/products/<file:[A-Za-z0-9_\.-]+>' => 'shop-image/product',
+                'upload/shop/products/<partner:eney>/image/thumb/<file:[A-Za-z0-9_\.-]+>' => 'shop-image/gallery-thumb',
+                'upload/shop/products/<partner:eney>/image/<file:[A-Za-z0-9_\.-]+>' => 'shop-image/gallery',
+                'upload/shop/products/<partner:eney>/thumb/<file:[A-Za-z0-9_\.-]+>' => 'shop-image/product-thumb',
+                'upload/shop/products/<partner:eney>/<file:[A-Za-z0-9_\.-]+>' => 'shop-image/product',
                 'gallery/<id:\d+>'=>'gallery/show',
                 'about'=>'text/about',
                 'contact'=>'text/contact',

@@ -5,25 +5,30 @@ use common\models\Product;
 use yii\helpers\Url;
 
 trait traitMakeSku{
-    public function makeGallery($item){
+    public function makeGallery($item, $listOnly = false){
         $sku = [];
+        $thumbUrl = $item->getLazyPic('thumb');
         $sku["link"] = Url::to(['/shop/product/view', 'slug' => $item->slug, 'id' => $item->id]);
-        $sku["previewImg"]["ico"] = $item->getPic('image', 'thumb', '/img/no_image.jpg');
-        $sku["previewImg"]["thumb"] = $item->getPic('image', 'thumb', '/img/no_image.jpg');
-        $sku["previewImg"]["preview"] = $item->getPic('image', 'preview', '/img/no_image.jpg');
-        $sku["previewImg"]["image"] = $item->getBigImg();
+        $sku["previewImg"]["ico"] = $thumbUrl;
+        $sku["previewImg"]["thumb"] = $thumbUrl;
+        $sku["previewImg"]["preview"] = $listOnly ? $thumbUrl : $item->getLazyPic('preview');
+        $sku["previewImg"]["image"] = $listOnly ? $thumbUrl : $item->getLazyPic('original');
         $sku["morePhode"][] = $sku["previewImg"];
-        foreach($item->images as $image){
+        if ($listOnly) {
+            return $sku;
+        }
 
-            $img["ico"] = $image->getThumbFileUrl('image', 'ico', '/img/no_image.jpg');
-            $img["image"] = $image->getImageFileUrl('image');
-            $img["thumb"] = $image->getThumbFileUrl('image', 'thumb', '/img/no_image.jpg');
+        foreach($item->getGalleryImages() as $image){
+
+            $img["ico"] = $image->getLazyPic('ico');
+            $img["image"] = $image->getLazyPic('original');
+            $img["thumb"] = $image->getLazyPic('thumb');
             $sku["morePhode"][] = $img;
         }
         return $sku;
     }
     
-    public function makeSKU(&$model,&$canonical = false){
+    public function makeSKU(&$model,&$canonical = false, $listOnly = false){
       //  $except = ["60430"];
       
       //  if(in_array($model->sku_group,$except)){
@@ -54,7 +59,7 @@ trait traitMakeSku{
        // dd(count($models));
         $skus = [];
         foreach ($models as $item ){
-            $sku = $this->makeGallery($item);
+            $sku = $this->makeGallery($item, $listOnly);
             if($item->is_main == "1"){
                 $canonical =  "https://".$_SERVER["SERVER_NAME"].Url::to(['/shop/product/view', 'slug' => $item->slug, 'id' => $item->id]);
             }

@@ -26,7 +26,7 @@ if($model->is_main == null || Yii::$app->request->get('filters') != NULL)
             <a href="<?=Url::to(['/shop/product/view', 'slug' => $model->slug, 'id' => $model->id])?>">
             <?php
 
-            echo Html::img($model->getPic('image', 'thumb', '/img/no_image.jpg'), ['class' => 'img-responsive', 'alt' => Html::encode($model->title)]);
+            echo Html::img($model->getLazyPic('thumb'), ['class' => 'img-responsive', 'alt' => Html::encode($model->title)]);
 
             ?>
             </a>

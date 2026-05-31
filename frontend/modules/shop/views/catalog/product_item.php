@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 
+$listThumbUrl = $model->getLazyPic('thumb');
 ?>
 <div class="products-block__card <? if ($middle == $k): ?>middle-item<? endif; ?>"  id="prod_<?= $model->id ?>">
         <? if($model->isAdmin() && (isset(\common\Helpers\Partners::$partners[$model->partner]))):?>
@@ -22,21 +23,22 @@ use yii\helpers\Url;
                                $firstUlr = Url::to(['/shop/product/view', 'slug' => $colorModel->slug, 'id' => $colorModel->id]); 
                             ?>
                             <? $colorModel = $color["model"]; ?>
+                            <? $colorThumbUrl = $colorModel->getLazyPic('thumb'); ?>
                             <button class="products-block__colors-item <? if ($model->id == $colorModel->id): ?>color-active<? endif; ?>" id="color_<?= $model->id ?>" color-id="<?= $colorModel->id ?>"  data-id="<?= $model->id ?>"
 
                                     data-url="<?= Url::to(['/shop/product/view', 'slug' => $colorModel->slug, 'id' => $colorModel->id]) ?>"
-                                    data-image="<?= $colorModel->getPic('image', 'thumb', '/img/no_image.jpg') ?>"
+                                    data-image="<?= $colorThumbUrl ?>"
                                     data-price="<?= $colorModel->price ?>"
                                     data-code="<?= $colorModel->code ?>"
                                     data-id="<?= $colorModel->id ?>"
                                     data-no-available="<?= $colorModel->not_available ?>"
-                                    ><img style="margin-left:0px;" src="<?= $color["morePhode"]["0"]["ico"] ?>"> </button>
+                                    ><img style="margin-left:0px;" src="<?= $colorThumbUrl ?>" alt="<?= Html::encode($colorModel->title) ?>"> </button>
                         <? endforeach; ?>    
                     </div>
                 <? endif; ?>
                 <? /*  <a class="url_<?=$model->id?>" href="<?=Url::to(['/shop/product/view', 'slug' => $model->slug, 'id' => $model->id])?>"> */ ?>
                  
-                    <? echo Html::img($model->getPic('image', 'thumb', '/img/no_image.jpg'), ['alt' => Html::encode($model->title), "id" => "img_" . $model->id,"data-id" => $model->id, "class" => "main-page", "_data-url" =>  $firstUlr ]); ?>
+                    <? echo Html::img($listThumbUrl, ['alt' => Html::encode($model->title), "id" => "img_" . $model->id,"data-id" => $model->id, "class" => "main-page", "_data-url" =>  $firstUlr ]); ?>
                 <? /* </a> */ ?>
             <? else:?>
                 <? //echo Html::img($model->getPic('image', 'thumb', '/img/no_image.jpg'), ['alt' => Html::encode($model->title)]); ?>
@@ -45,7 +47,7 @@ use yii\helpers\Url;
                         data-code="<?= $model->code ?>"
                         id="color_<?= $model->id ?>"
                 >
-                    <img class="no-colors" src="<?=$model->getPic('image', 'thumb', '/img/no_image.jpg')?>" alt="<?= Html::encode($model->title)?>">
+                    <img class="no-colors" src="<?=$listThumbUrl?>" alt="<?= Html::encode($model->title)?>">
                 </a>
             <? endif;?>
         </div>

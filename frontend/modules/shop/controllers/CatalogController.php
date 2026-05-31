@@ -143,7 +143,8 @@ class CatalogController extends \yii\web\Controller
         $colors = [];
         
         foreach($products as $k => &$model){
-            if(($color = $this->makeSKU($model)) == true){
+            $canonical = false;
+            if(($color = $this->makeSKU($model, $canonical, true)) == true){
                 $model->checkAvaiableSize(); 
                 $colors[$model->id] = $color;
                
@@ -184,8 +185,8 @@ class CatalogController extends \yii\web\Controller
           //  $_map[$k] = $it[0];
         }
       
-		$parentCat = Category::find()->where(["id" => $category->parent_id])->select(["id"])->one();
-        $prentCategoryName = $parentCat->title;
+		$parentCategory = $category->parent;
+        $prentCategoryName = $parentCategory ? $parentCategory->title : null;
 		
         return $this->render('list', [
             'category' => $category,
@@ -243,7 +244,8 @@ class CatalogController extends \yii\web\Controller
                 $colors = [];
 
                 foreach($products as $k => &$model){
-                    if(($color = $this->makeSKU($model)) == true){
+                    $canonical = false;
+                    if(($color = $this->makeSKU($model, $canonical, true)) == true){
                         $model->checkAvaiableSize(); 
                         $colors[$model->id] = $color;
                     }

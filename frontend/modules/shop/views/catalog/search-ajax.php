@@ -33,7 +33,7 @@ $prefix = "";
                 <a href="<?=Url::to(['/shop/catalog/view', 'slug' => $product->slug, 'id' => $product->id])?>">
                     <?php
 
-                    echo Html::img($product->getThumbFileUrl('image', 'thumb', '/img/no_image.jpg'), ['width' => '100%']);
+                    echo Html::img($product->getLazyPic('thumb'), ['width' => '100%']);
 
                     ?>
                 </a>
