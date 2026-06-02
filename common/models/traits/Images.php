@@ -69,8 +69,22 @@ trait Images {
         $k = $w/$h;
      //  echo $src." ".$dist."\r\n";
         if($flag == false && ($k > 0.7) && ($k < 1.3)){
-            if (!copy($src, $dist)) {
-                Yii::warning("Cannot copy image: $src -> $dist");
+            try {
+                $lastError = null;
+                $copied = @copy($src, $dist);
+                if (!$copied) {
+                    $lastError = error_get_last();
+                }
+            } catch (\Throwable $e) {
+                $copied = false;
+                $lastError = ['message' => $e->getMessage()];
+            }
+
+            if (!$copied) {
+                $reason = $lastError['message'] ?? 'unknown error';
+                $message = "skipped image copy: $src -> $dist; reason: $reason";
+                Yii::warning($message);
+                echo $message . "\r\n";
                 return false;
             }
             $this->optimizeImportedImageFile($dist);
@@ -261,7 +275,9 @@ trait Images {
      
         if($this->copyFtpFile($picture,$image) || (!file_exists($image) && !empty($picture) && $this->isFile($picture))) {
          
-            $this->normalizeOriginalFoto($picture,$image);
+            if (!$this->normalizeOriginalFoto($picture,$image)) {
+                return false;
+            }
          
                 $thumbFilePath = [
                     'thumb' => ShopImageStorage::productThumbPath($id, $fileData['extension'], 'thumb', $partner),
@@ -307,7 +323,9 @@ trait Images {
                 $image = ShopImageStorage::galleryImagePath($modelImage->id, $fileData['extension'], $partner);
                     
                 if ($this->copyFtpFile($pic,$image) || !file_exists($image) && isset($fileData['extension']) && $fileData['extension'] != "" && $this->isFile($pic)) {
-                       $this->normalizeOriginalFoto($pic,$image);
+                       if (!$this->normalizeOriginalFoto($pic,$image)) {
+                           continue;
+                       }
                   //  if (!is_file($image)) {
 
                      //   copy($pic, $image, stream_context_create($this->arrContextOptions));
