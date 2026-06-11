@@ -26,6 +26,10 @@ Class ImportXmlTotobiController extends Controller
     public $extAvailbleProductsCode = ["1904-01","1901-01","1904-01","1909-08","1901-08"];
     public $partner = 'totobi';
     public $picLoads = true;
+    /**
+     * Whether existing imported product images should be downloaded again.
+     */
+    public $overwriteImages = false;
     public $contex = true;
     public $arrContextOptions = array(
         "ssl" => array(
@@ -33,13 +37,52 @@ Class ImportXmlTotobiController extends Controller
             "verify_peer_name" => false,
         ),
     );
-    function get_http_response_code($domain1){
+
+    public function options($actionID)
+    {
+        return array_merge(parent::options($actionID), [
+            'overwriteImages',
+        ]);
+    }
+    function get_http_response_code($domain1, $contextOptions = null){
+        $contextOptions = $contextOptions ?: $this->arrContextOptions;
         if($this->contex == true)
-            $headers = get_headers($domain1,false,stream_context_create($this->arrContextOptions));
+            $headers = @get_headers($domain1,false,stream_context_create($contextOptions));
         else
-            $headers = get_headers($domain1);
+            $headers = @get_headers($domain1);
+
+        if ($headers === false || !isset($headers[0])) {
+            return '000';
+        }
 
         return substr($headers[0], 9, 3);
+    }
+
+    function copyImage($src, $dist){
+        try {
+            $lastError = null;
+            if($this->contex == true)
+                $copied = @copy($src, $dist, stream_context_create($this->arrContextOptions));
+            else
+                $copied = @copy($src, $dist);
+
+            if (!$copied) {
+                $lastError = error_get_last();
+            }
+        } catch (\Throwable $e) {
+            $copied = false;
+            $lastError = ['message' => $e->getMessage()];
+        }
+
+        if (!$copied) {
+            $reason = $lastError['message'] ?? 'unknown error';
+            $message = "skipped image copy: $src -> $dist; reason: $reason";
+            Yii::warning($message);
+            echo $message . "\r\n";
+            return false;
+        }
+
+        return true;
     }
 
     function setIsMain(){
@@ -196,7 +239,9 @@ Class ImportXmlTotobiController extends Controller
                     $modelTranslate->title = $name;
                     $modelTranslate->meta_title = $name;
                     $modelTranslate->meta_description = $name;
-                }    
+                }
+                if(!isset($modelTranslate->seo))
+                    $modelTranslate->seo = " ";
                 $modelTranslate->save(false);
             }
         }
@@ -270,17 +315,17 @@ Class ImportXmlTotobiController extends Controller
                 if(isset($fileData['extension']) && $fileData['extension'] != "" && $this->get_http_response_code($picture[0]) == "200") {
                     $image = Yii::getAlias('@frontend/web/upload/shop/products/' . $model->id . '.' . $fileData['extension']);
 
-                    if (!is_file($image)) {
-                        if($this->contex == true)
-                            copy($picture[0], $image, stream_context_create($this->arrContextOptions));
-                        else
-                            copy($picture[0], $image);
-                        $thumbFilePath = [
-                            'thumb' => Yii::getAlias('@frontend/web/upload/shop/products/thumb/thumb_' . $model->id . '.' . $fileData['extension']),
-                            'preview' => Yii::getAlias('@frontend/web/upload/shop/products/thumb/preview_' . $model->id . '.' . $fileData['extension']),
-                        ];
-						$thumbsOptions = is_array($this->thumbs) ? $this->thumbs : [];
-						$this->createThumbs($image, $thumbFilePath, $thumbsOptions);
+                    if ($this->overwriteImages || !is_file($image)) {
+                        if ($this->copyImage($picture[0], $image)) {
+                            $thumbFilePath = [
+                                'thumb' => Yii::getAlias('@frontend/web/upload/shop/products/thumb/thumb_' . $model->id . '.' . $fileData['extension']),
+                                'preview' => Yii::getAlias('@frontend/web/upload/shop/products/thumb/preview_' . $model->id . '.' . $fileData['extension']),
+                            ];
+                            $thumbsOptions = is_array($this->thumbs) ? $this->thumbs : [];
+                            $this->createThumbs($image, $thumbFilePath, $thumbsOptions);
+                        } else {
+                            $log["errors_images"][] = "1 ".$picture[0]." -> ".$model->partner_id.' @frontend/web/upload/shop/products/image/'.$model->id. '.' . $fileData['extension'];
+                        }
                     }
                 }else{
                     $log["errors_images"][] = "1 ".$picture[0]." -> ".$model->partner_id.' @frontend/web/upload/shop/products/image/'.$model->id. '.' . $fileData['extension'];
@@ -311,11 +356,11 @@ Class ImportXmlTotobiController extends Controller
 
                         if(isset($fileData['extension']) && $fileData['extension'] != "" && $this->get_http_response_code($pic,$this->arrContextOptions) == "200"){
                             $image = Yii::getAlias('@frontend/web/upload/shop/products/image/'.$modelImage->id. '.' . $fileData['extension']);
-                            if(!is_file($image)) {
-                                if($this->contex == true)
-                                    copy($pic, $image,stream_context_create($this->arrContextOptions));
-                                else
-                                    copy($pic, $image);
+                            if($this->overwriteImages || !is_file($image)) {
+                                if (!$this->copyImage($pic, $image)) {
+                                    $log["errors_images"][] = "2 ".$pic." -> ".$model->partner_id.' @frontend/web/upload/shop/products/image/'.$modelImage->id. '.' . $fileData['extension'];
+                                    continue;
+                                }
 
                                 $thumbFilePath = [
                                     'thumb' => Yii::getAlias('@frontend/web/upload/shop/products/image/thumb/thumb_' . $modelImage->id . '.' . $fileData['extension']),
