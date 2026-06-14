@@ -102,7 +102,7 @@
                         }
                         ?>
 
-                        <? include 'product_item.php' ?> 
+                        <? include __DIR__ . '/product_item.php' ?> 
 
                     <? endforeach; ?>
                 <? endif; ?>

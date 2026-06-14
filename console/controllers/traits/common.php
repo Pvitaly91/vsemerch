@@ -217,8 +217,10 @@ trait Common{
                 foreach($this->translateMap as $fName){
                     if(isset($product[$fName."_".$language]))
                         $modelTranslate->$fName = $product[$fName."_".$language];
-                    else
+                    elseif(isset($product[$fName]))
                         $modelTranslate->$fName = $product[$fName];
+                    elseif($pFlag == 1)
+                        $modelTranslate->$fName = "";
                 }
               //  $modelTranslate->title = $product["title"];
                // $modelTranslate->meta_title = $product["meta_title"];

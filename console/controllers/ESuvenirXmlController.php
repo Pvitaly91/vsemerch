@@ -6,6 +6,8 @@ use yii\helpers\Inflector;
 class ESuvenirXmlController extends Controller {
     use \console\controllers\traits\common, \common\models\traits\Images;
     private const IS_PROD = false;
+    private const FTP_USER = 'Agcity';
+    private const FTP_PASSWORD = '6gpWS392akJd';
 
     public $partnerName = "esuvenir";
 
@@ -23,6 +25,51 @@ class ESuvenirXmlController extends Controller {
     public $photoList;
 
     public $ruDate = [];
+    function ftpConnect(){
+        $this->ftpConect = ftp_connect('176.9.83.91');
+        if (!$this->ftpConect) {
+            $message = "skipped ftp connect: 176.9.83.91; reason: connection failed";
+            \Yii::warning($message);
+            echo $message . "\r\n";
+            return false;
+        }
+
+        $this->ftpLogin = @ftp_login($this->ftpConect, self::FTP_USER, self::FTP_PASSWORD);
+        if (!$this->ftpLogin) {
+            $lastError = error_get_last();
+            $reason = $lastError['message'] ?? 'login failed';
+            $message = "skipped ftp login: 176.9.83.91; reason: $reason";
+            \Yii::warning($message);
+            echo $message . "\r\n";
+            return false;
+        }
+
+        ftp_pasv($this->ftpConect, true);
+        return true;
+    }
+
+    function loadXmlFile($path){
+        try {
+            $xml = @simplexml_load_file($path);
+        } catch (\Throwable $e) {
+            $xml = false;
+            $lastError = ['message' => $e->getMessage()];
+        }
+
+        if ($xml === false) {
+            if (!isset($lastError)) {
+                $lastError = error_get_last();
+            }
+            $reason = $lastError['message'] ?? 'unknown error';
+            $message = "skipped xml load: $path; reason: $reason";
+            \Yii::warning($message);
+            echo $message . "\r\n";
+            return false;
+        }
+
+        return $xml;
+    }
+
     public function getXmlPath($lng){
         if($lng == "ua") 
             $file_name = "es_products_export_ua.xml";
@@ -43,10 +90,11 @@ class ESuvenirXmlController extends Controller {
         $ext[] = "height";
         $ext[] = "width";
 
-        $ftpUser = getenv('AGCITY_FTP_USER') ?: 'Agcity';
-        $ftpPassword = getenv('AGCITY_FTP_PASSWORD') ?: '';
-        $path = "ftp://{$ftpUser}:{$ftpPassword}@176.9.83.91/es_products_export_ru.xml";
-        $xml_file = simplexml_load_file($path);
+        $path = "ftp://".self::FTP_USER.":".self::FTP_PASSWORD."@176.9.83.91/es_products_export_ru.xml";
+        $xml_file = $this->loadXmlFile($path);
+        if ($xml_file === false) {
+            return false;
+        }
         foreach ($xml_file->item as $item) {
             $items = (array)$item->catalog_product_attribute->item;
             foreach($items as $fName => $value) {
@@ -62,6 +110,7 @@ class ESuvenirXmlController extends Controller {
                 }
             }
         }
+        return true;
     }
     function initData()
     {
@@ -72,14 +121,25 @@ class ESuvenirXmlController extends Controller {
         $map["short_description"] =  "description";
         $map["price"] = "price";
         $ext = ["image","archive","print_width","print_height","avail_print_methods","deep"];
-        $this->getRuDate($map,$ext);
+        if ($this->getRuDate($map,$ext) === false) {
+            return false;
+        }
        // print_r($this->ruDate);
        // exit;
-        $this->ftpConnect();
+        if ($this->ftpConnect() === false) {
+            return false;
+        }
        //exit;
-        $allImagesUser = getenv('ALL_IMAGES_FTP_USER') ?: 'all_images';
-        $allImagesPassword = getenv('ALL_IMAGES_FTP_PASSWORD') ?: '';
-        $this->photoList = array_flip(scandir("ftp://{$allImagesUser}:{$allImagesPassword}@176.9.83.91/"));
+        $photoList = @scandir("ftp://".self::FTP_USER.":".self::FTP_PASSWORD."@176.9.83.91/");
+        if ($photoList === false) {
+            $lastError = error_get_last();
+            $reason = $lastError['message'] ?? 'unknown error';
+            $message = "skipped ftp photo list: 176.9.83.91; reason: $reason";
+            \Yii::warning($message);
+            echo $message . "\r\n";
+            return false;
+        }
+        $this->photoList = array_flip($photoList);
         $this->sizeTeble = array_reverse($this->sizeTeble);
         /*if(($path = $this->getXmlPath($lng)) === false){
             echo "File not found \r\n";
@@ -92,8 +152,11 @@ class ESuvenirXmlController extends Controller {
        // $imgPath = "ftp://{$allImagesUser}:{$allImagesPassword}@176.9.83.91/";
         $imgPath = "";
         //file_get_contents("ftp://{$allImagesUser}:{$allImagesPassword}@176.9.83.91/95851002%2F1___4.jpg");
-        $path = "ftp://{$ftpUser}:{$ftpPassword}@176.9.83.91/es_products_export_ukr.xml";
-        $xml_file = simplexml_load_file($path);
+        $path = "ftp://".self::FTP_USER.":".self::FTP_PASSWORD."@176.9.83.91/es_products_export_ukr.xml";
+        $xml_file = $this->loadXmlFile($path);
+        if ($xml_file === false) {
+            return false;
+        }
         
         $num = 100000000000000;
         $i = 0;
@@ -364,7 +427,10 @@ class ESuvenirXmlController extends Controller {
     function actionUpdate() {
      
         echo "start ".date("d-m-Y H:i:s")." \r\n";
-        $this->initData("ru");
+        if ($this->initData("ru") === false) {
+            echo "stop ".date("d-m-Y H:i:s")." \r\n";
+            return;
+        }
       
         $this->createPartnerMainCat();
         echo "init data ".date("d-m-Y H:i:s")." \r\n";

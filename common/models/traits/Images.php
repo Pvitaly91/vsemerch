@@ -32,7 +32,18 @@ trait Images {
         $urlInfo = parse_url($file);
         if(isset($urlInfo["scheme"])){
              if($urlInfo["scheme"] == "ftp"){
-                 $result = is_file($file);
+                 try {
+                     $result = @is_file($file);
+                     if (!$result) {
+                         $lastError = error_get_last();
+                         if (isset($lastError['message'])) {
+                             Yii::warning("skipped image check: $file; reason: {$lastError['message']}");
+                         }
+                     }
+                 } catch (\Throwable $e) {
+                     Yii::warning("skipped image check: $file; reason: {$e->getMessage()}");
+                     $result = false;
+                 }
              }else{
                  $ch = curl_init();
                  curl_setopt($ch, CURLOPT_URL, $file);
